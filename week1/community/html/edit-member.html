@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../css/reset.css" />
+        <link rel="stylesheet" href="../css/header.css" />
+        <link rel="stylesheet" href="../css/edit-member.css" />
+        <title>회원정보수정</title>
+    </head>
+    <body>
+        <header class="header">
+            <h1>아무 말 대잔치</h1>
+            <div class="header-image">
+                <img src="../images/wolf.jpg" />
+                <div class="menu">
+                    <div>회원정보수정</div>
+                    <div>비밀번호수정</div>
+                    <div>로그아웃</div>
+                </div>
+            </div>
+        </header>
+        <section class="profile">
+            <h2 class="bold">회원정보수정</h2>
+            <aritcle class="photo">
+                <div class="photo-label">
+                    <h3 class="bold">프로필 사진*</h3>
+                </div>
+                <img src="../images/wolf.jpg" class="image" />
+                <div class="change">
+                    <button class="bold">변경</button>
+                </div>
+            </aritcle>
+            <form action="" method="" class="edit-form">
+                <div class="email">
+                    <p class="bold">이메일</p>
+                    <p>startupcode@gmail.com</p>
+                </div>
+                <div class="profile-info">
+                    <label for="nickname" class="bold">닉네임</label>
+                    <input
+                        type="text"
+                        id="nickname"
+                        name="nickname"
+                        value="스타트업코드"
+                        placeholder="닉네임을 입력하세요" />
+                    <p class="helper">* helper text</p>
+                </div>
+                <button type="submit" class="button bold">수정하기</button>
+                <a href="login.html" class="login">회원 탈퇴</a>
+            </form>
+            <button class="finish">수정완료</button>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/header.css"/>
+    <link rel="stylesheet" href="../css/join.css"/>
+    <script src="../js/join.js" defer></script>
+    <title>회원가입</title>
+</head>
+<body>
+<header class="header">
+    <img src="../images/back.png" class="back"/>
+    <h1>아무 말 대잔치</h1>
+</header>
+<section class="profile">
+    <h2>회원가입</h2>
+    <aritcle class="photo">
+        <div class="photo-label">
+            <h3>프로필 사진*</h3>
+            <p class="helper profile-helper">*프로필 사진을 추가해주세요.</p>
+        </div>
+        <label for="file" class="add">
+            <input type="file" id="file" class="file">
+            <img src="../images/plus.png" class="plus">
+        </label>
+    </aritcle>
+    <form action="/login" method="get" class="join-form">
+        <div class="profile-info">
+            <label for="email">이메일*</label>
+            <input type="text" id="email" name="email" placeholder="이메일을 입력하세요"/>
+            <p class="helper email-helper">*이메일을 입력해주세요.</p>
+        </div>
+        <div class="profile-info">
+            <label for="password">비밀번호*</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요"/>
+            <p class="helper password-helper">*비밀번호를 입력해주세요.</p>
+        </div>
+        <div class="profile-info">
+            <label for="password-check">비밀번호 확인*</label>
+            <input type="password" id="password-check" name="password-check" placeholder="비밀번호를 한 번 더 입력하세요"/>
+            <p class="helper password-check-helper">*비밀번호를 한 번 더 입력해주세요.</p>
+        </div>
+        <div class="profile-info">
+            <label for="nickname">닉네임*</label>
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하세요"/>
+            <p class="helper nickname-helper">*닉네임을 입력해주세요.</p>
+        </div>
+        <button type="button" class="button">회원가입</button>
+        <a href="/login" class="login">로그인하러 가기</a>
+    </form>
+</section>
+</body>
+</html>

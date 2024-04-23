@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <link rel="stylesheet" href="../css/header.css"/>
+    <link rel="stylesheet" href="../css/post.css"/>
+    <script src="../js/header.js" defer></script>
+    <script src="../js/post.js" defer></script>
+    <title>게시글 상세조회</title>
+</head>
+<body>
+<!-- 모달 -->
+<div class="modal-background">
+    <div class="modal">
+        <p class="bold">게시글을 삭제하시겠습니까?</p>
+        <p>삭제한 내용은 복구 할 수 없습니다.</p>
+        <div class="buttons">
+            <button class="cancel regular">취소</button>
+            <button class="confirm regular">확인</button>
+        </div>
+    </div>
+</div>
+<header class="header">
+    <img src="../images/back.png" class="back"/>
+    <h1>아무 말 대잔치</h1>
+    <div class="header-image">
+        <img src="../images/wolf.jpg"/>
+        <div class="menu">
+            <div>회원정보수정</div>
+            <div>비밀번호수정</div>
+            <div>로그아웃</div>
+        </div>
+    </div>
+</header>
+<section class="wrap">
+    <section class="post">
+        <header class="title">
+            <h2 class="bold"></h2>
+            <div class="info">
+                <div class="writer">
+                    <div class="image">
+                        <img src="" alt=""/>
+                    </div>
+                    <div class="nickname bold"></div>
+                    <div class="date regular"></div>
+                </div>
+                <div class="buttons">
+                    <button class="edit-post regular">수정</button>
+                    <button class="delete-post regular">삭제</button>
+                </div>
+            </div>
+        </header>
+        <article class="content">
+            <div class="image">
+                <img src="" alt=""/>
+            </div>
+            <div class="text">
+                <p></p>
+            </div>
+            <div class="count">
+                <div>
+                    <p class="number bold"></p>
+                    <p class="kind bold">조회수</p>
+                </div>
+                <div>
+                    <p class="number bold"></p>
+                    <p class="kind bold">댓글</p>
+                </div>
+            </div>
+        </article>
+    </section>
+    <section class="comment">
+        <div class="comment-area">
+            <div class="comment-text">
+                <label>
+                    <textarea placeholder="댓글을 남겨주세요!"></textarea>
+                </label>
+            </div>
+            <hr/>
+            <div class="comment-button-layout">
+                <button class="comment-button bold">댓글 등록</button>
+            </div>
+        </div>
+        <div class="comment-list"></div>
+    </section>
+</section>
+</body>
+</html>
