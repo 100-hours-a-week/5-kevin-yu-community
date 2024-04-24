@@ -28,6 +28,11 @@ emailInput.addEventListener('change', () => {
     changeButtonState();
 });
 
+function showHelperText(helper, text) {
+    helper.textContent = text;
+    helper.style.visibility = 'visible';
+}
+
 // 비밀번호를 입력하고 포커스가 빠져나갔을 때
 passwordInput.addEventListener('change', () => {
     const password = passwordInput.value;
@@ -41,8 +46,7 @@ passwordInput.addEventListener('change', () => {
     // 만약 비밀번호가 유효하면 도움말을 숨기고, 유효하지 않다면 도움말을 표시
     const helper = document.querySelector('.password-helper');
     if (password === '') {
-        helper.textContent = '*비밀번호를 입력해주세요.';
-        helper.style.visibility = 'visible';
+        showHelperText(helper, '*비밀번호를 입력해주세요.');
     } else if (!isCollectPassword) {
         helper.innerHTML = '*비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 숫자, 특수문자를<br> 각각 최소 1개 포함해야 합니다.';
         helper.style.visibility = 'visible';
@@ -56,6 +60,28 @@ passwordInput.addEventListener('change', () => {
 // 이메일과 비밀번호의 유효성 검사를 모두 통과했다면, 로그인 버튼을 눌렀을 때 게시판으로 이동
 loginButton.addEventListener('click', () => {
     if (isCollectEmail && isCollectPassword) {
-        window.location.href = '/board';
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        // 클라이언트 서버에 로그인 정보를 보냄
+        // 클라이언트 서버는 JSON API 서버에서 JSON을 받아서 비교 후 로그인 처리
+        fetch('/member/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({email, password})
+        })
+            .then(response => {
+                const helper = document.querySelector('.password-helper');
+
+                if (response.status === 200) {
+                    response.json()
+                        .then(data => window.location.href = `/board?id=${data.id}`)
+                } else if (response.status === 400) {
+                    showHelperText(helper, '*잘못된 요청 정보입니다.');
+                } else if (response.status === 401) {
+                    showHelperText(helper, '*아이디 또는 비밀번호가 일치하지 않습니다.');
+                }
+            });
     }
 });
