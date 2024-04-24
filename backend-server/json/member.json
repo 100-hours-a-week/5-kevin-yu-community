@@ -4,30 +4,35 @@
       "id": 0,
       "image": "wolf.jpg",
       "email": "startup@gmail.com",
+      "password": "asdASD123!",
       "nickname": "스타트업코드"
     },
     {
       "id": 1,
       "image": "lion.jpg",
       "email": "developer@gmail.com",
+      "password": "asdASD123!",
       "nickname": "개발의마법사"
     },
     {
       "id": 2,
       "image": "eagle.jpg",
       "email": "designer@gmail.com",
+      "password": "asdASD123!",
       "nickname": "디자인의고수"
     },
     {
       "id": 3,
       "image": "bear.jpg",
       "email": "marketing@gmail.com",
+      "password": "asdASD123!",
       "nickname": "마케팅담당"
     },
     {
       "id": 4,
       "image": "tiger.jpg",
       "email": "finance@gmail.com",
+      "password": "asdASD123!",
       "nickname": "재무책임자"
     }
   ]
