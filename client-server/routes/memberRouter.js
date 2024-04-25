@@ -4,6 +4,8 @@ import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 import multer from 'multer'; // multipart/form-data 처리용 body-parser
 
+import memberController from '../controllers/memberController.js';
+
 const __filename = fileURLToPath(import.meta.url);
 // path.resolve -> __dirname이 route의 하위 경로이므로, route의 상위 디렉토리로 이동해야 public에 접근 가능
 const __dirname = path.resolve(dirname(__filename), '..');
@@ -20,9 +22,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 const router = express.Router();
-
-import memberController from '../controllers/memberController.js';
-
 
 // 로그인 페이지 서빙
 router.get('/login', (req, res) => {

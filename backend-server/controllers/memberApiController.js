@@ -2,7 +2,6 @@ import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 import fs from 'fs';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
 const JSON_PATH = path.join(__dirname, "json/member.json");
@@ -58,6 +57,14 @@ const method = {
                 message: 'Join successful'
             });
         }
+    },
+    profileImage: async (req, res) => {
+        const members = await getMembers();
+        console.log(`members: ${members}`);
+        const member = members.find(member => member.id === Number(req.query.id));
+        res.json({
+            image: member.image
+        });
     }
 }
 

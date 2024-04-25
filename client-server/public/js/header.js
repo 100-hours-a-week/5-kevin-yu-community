@@ -27,3 +27,14 @@ document.querySelectorAll('.menu div').forEach(div => {
         window.location.href = path;
     });
 });
+
+// 사용자 프로필 이미지 이름 받아오기
+document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    const response = await fetch(`http://localhost:4000/json/member/profile?id=${id}`);
+    console.log(response);
+    const data = await response.json();
+    document.querySelector('.header-image img').src = `../images/members/${data.image}`;
+});

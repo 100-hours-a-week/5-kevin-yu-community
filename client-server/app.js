@@ -4,6 +4,7 @@ import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 
 import memberRouter from './routes/memberRouter.js';
+import boardRouter from './routes/boardRouter.js';
 
 const app = express();
 const port = 3000;
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 
 // member.json을 쓰는 페이지는 전부 memberRouter로
 app.use('/member', memberRouter);
+app.use('/board', boardRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
