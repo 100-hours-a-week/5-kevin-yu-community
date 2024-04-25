@@ -1,7 +1,7 @@
 // 헤더
 // 뒤로 가기 버튼
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = '/login';
+    window.location.href = '/member/login';
 });
 
 // 본문
@@ -40,6 +40,7 @@ function changeButtonState() {
 }
 
 // 사용자가 사진을 업로드하거나 제거했을 때
+let image;
 profileButton.addEventListener('change', (e) => {
     const defaultImage = document.querySelector('.add'); // 기본 회색 배경
     const plusImage = document.querySelector('.add img'); // 플러스 모양 이미지
@@ -49,7 +50,7 @@ profileButton.addEventListener('change', (e) => {
     // e.target.files !== undefined 
     // -> 유효성 검사를 통과하지 않고 버튼을 누르면 이벤트를 강제로 터트리는데, 이때 체크를 안해주면 안내문이 나오지 않음
     if (e.target.files !== undefined && e.target.files.length > 0) { // 만약 이미지를 업로드 했다면(업로드하면 1이 나옴)
-        let image = e.target.files[0]; // 사용자가 업로드한 파일
+        image = e.target.files[0]; // 사용자가 업로드한 파일
         let reader = new FileReader();
         // onloadend -> 파일 읽기 작업이 끝났을 때
         reader.onloadend = () => {
@@ -72,6 +73,8 @@ profileButton.addEventListener('change', (e) => {
         plusImage.style.display = 'block';
         isUploaded = false; // 이미지 업로드 상태 변경
         helper.style.visibility = 'visible'; // 도움말 표시
+
+        image = null;
     }
 });
 
@@ -137,6 +140,7 @@ passwordCheckInput.addEventListener('change', () => {
     const helper = document.querySelector('.password-check-helper');
     // 비밀번호와 비밀번호 확인의 입력값이 동일한지 확인
     isSameWithPassword = password === passwordCheck;
+    isSameWithPasswordCheck = password === passwordCheck;
 
     // 안내문을 위한 추가 조건 검증
     if (passwordCheck === '') {
@@ -148,18 +152,6 @@ passwordCheckInput.addEventListener('change', () => {
     }
 
     changeButtonState();
-});
-
-const nicknameList = []; // 회원들의 닉네임을 저장하는 리스트
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('/json/member')
-        .then(response => response.json())
-        .then(data => {
-            // 리스트에 회원의 닉네임을 하나씩 저장
-            for (let m of data.members) {
-                nicknameList.push(m.nickname);
-            }
-        });
 });
 
 // 닉네임을 입력하고 포커스가 빠져나갔을 때
@@ -179,8 +171,6 @@ nicknameInput.addEventListener('change', () => {
         showHelperText(helper, '*닉네임을 입력해주세요.');
     } else if (nickname.includes(' ')) {
         showHelperText(helper, '*띄어쓰기를 없애주세요.');
-    } else if (nicknameList.includes(nickname)) {
-        showHelperText(helper, '*중복된 닉네임입니다.');
     } else if (nickname.length > 10) {
         showHelperText(helper, '*닉네임은 최대 10자까지 작성 가능합니다.');
     } else {
@@ -194,7 +184,37 @@ nicknameInput.addEventListener('change', () => {
 joinButton.addEventListener('click', () => {
     if (isUploaded && isCollectEmail && isCollectPassword
         && isSameWithPasswordCheck && isSameWithPassword && isCollectNickname) {
-        window.location.href = '/login';
+
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("email", emailInput.value);
+        formData.append("password", passwordInput.value);
+        formData.append("nickname", nicknameInput.value);
+
+        fetch('/member/join', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            console.log(response);
+            const status = response.status;
+            return response.json().then(json => {
+                return {status, json};
+            })
+        }).then(({status, json}) => {
+            const emailHelper = document.querySelector('.email-helper');
+            const nicknameHelper = document.querySelector('.nickname-helper');
+
+            if (status === 201) {
+                alert('회원가입이 완료되었습니다.');
+                window.location.href = '/member/login';
+            } else if (status === 409) {
+                if (json.message === 'Email already exists') {
+                    showHelperText(emailHelper, '*이미 등록된 이메일입니다.');
+                } else {
+                    showHelperText(nicknameHelper, '*이미 존재하는 닉네임입니다.');
+                }
+            }
+        });
     } else {
         const event = new Event('change');
         profileButton.dispatchEvent(event);

@@ -2,38 +2,45 @@
   "members": [
     {
       "id": 0,
-      "image": "wolf.jpg",
       "email": "startup@gmail.com",
       "password": "asdASD123!",
-      "nickname": "스타트업코드"
+      "nickname": "스타트업코드",
+      "image": "1619361600000_wolf.jpg"
     },
     {
       "id": 1,
-      "image": "lion.jpg",
       "email": "developer@gmail.com",
       "password": "asdASD123!",
-      "nickname": "개발의마법사"
+      "nickname": "개발의마법사",
+      "image": "1619361900000_lion.jpg"
     },
     {
       "id": 2,
-      "image": "eagle.jpg",
       "email": "designer@gmail.com",
       "password": "asdASD123!",
-      "nickname": "디자인의고수"
+      "nickname": "디자인의고수",
+      "image": "1619362200000_eagle.jpg"
     },
     {
       "id": 3,
-      "image": "bear.jpg",
       "email": "marketing@gmail.com",
       "password": "asdASD123!",
-      "nickname": "마케팅담당"
+      "nickname": "마케팅담당",
+      "image": "1619362500000_bear.jpg"
     },
     {
       "id": 4,
-      "image": "tiger.jpg",
       "email": "finance@gmail.com",
       "password": "asdASD123!",
-      "nickname": "재무책임자"
+      "nickname": "재무책임자",
+      "image": "1619362800000_tiger.jpg"
+    },
+    {
+      "id": 5,
+      "email": "newbie@gmail.com",
+      "password": "asdASD123!",
+      "nickname": "리트리버",
+      "image": "1619363100000_dog.jpg"
     }
   ]
 }
