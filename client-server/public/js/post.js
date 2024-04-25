@@ -1,7 +1,13 @@
+// query string에서 파싱한 게시글의 번호
+const no = new URLSearchParams(window.location.search).get('no');
+// query string에서 파싱한 사용자 번호
+const id = new URLSearchParams(window.location.search).get('id');
+
+
 // 헤더
 // 뒤로 가기 버튼
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = '/board';
+    window.location.href = `/board?id=${id}`;
 });
 
 // 조회수와 댓글의 개수를 변환하는 함수
@@ -75,23 +81,18 @@ function makeCommentList(comments) {
     return commentList;
 }
 
-// query string에서 파싱한 게시글의 번호
-const no = new URLSearchParams(window.location.search).get('no');
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/json/board')
+    fetch(`http://localhost:4000/json/post?no=${no}`)
         .then(response => response.json())
-        .then(data => {
+        .then(post => {
+            console.log(post);
             const commentSection = document.querySelector('.comment');
-            data.posts.forEach(post => {
-                // 게시글 목록 중 query string과 게시글 번호가 똑같은 데이터를 찾음
-                if (post.no === parseInt(no)) {
-                    insertText(post);
+            // 게시글 목록 중 query string과 게시글 번호가 똑같은 데이터를 찾음
+            insertText(post);
 
-                    const commentList = makeCommentList(post.comments);
-                    commentSection.appendChild(commentList);
-                }
-            }); // forEach
+            const commentList = makeCommentList(post.comments);
+            commentSection.appendChild(commentList);
         }) // then
         .catch(error => console.log(`Error: ${error}`));
 });
@@ -108,6 +109,7 @@ commentTextarea.addEventListener('keyup', () => {
 
 const modal = document.querySelector('.modal');
 const modalBackground = document.querySelector('.modal-background');
+
 function showModal(text) {
     document.querySelector('.modal p:first-child').textContent = text;
     modal.style.display = 'flex';

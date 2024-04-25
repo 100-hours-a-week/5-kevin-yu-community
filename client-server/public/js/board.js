@@ -48,11 +48,11 @@ function makePostElement(data, post) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/json/board')
+    fetch('http://localhost:4000/json/board')
         .then(response => response.json())
         .then(data => {
             const postList = document.querySelector('.post-list');
-            data.posts.forEach(post => {
+            data.forEach(post => {
                 // JSON에서 가져온 데이터로 새로운 요소를 생성하고
                 let newPostElement = makePostElement(data, post);
                 // 기존의 요소 밑에 추가함
@@ -64,9 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 이벤트 위임을 통해 특정 게시글로 이동
 document.querySelector('.post-list').addEventListener('click', (e) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
     // 클릭한 게시글의 게시판 번호
     // closest() -> 가장 가까운 부모 요소 중 입력된 선택자에 해당하는 요소
     const boardNo = e.target.closest('.post').childNodes[1].value;
     // 백엔드 코드 없이 path variable을 쓰는 방법이 떠오르지 않아서 query string으로 처리
-    window.location.href = '/post?no=' + boardNo;
+    window.location.href = `/post?no=${boardNo}&id=${id}`;
 });
