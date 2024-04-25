@@ -7,8 +7,8 @@ const __dirname = path.resolve(dirname(__filename), '..');
 const HTML_PATH = path.join(__dirname, 'public/html');
 
 const methods = {
-    showBoard: async (req, res) => {
-        res.sendFile(path.join(HTML_PATH, 'board.html'))
+    showPost: async (req, res) => {
+        res.sendFile(path.join(HTML_PATH, 'post.html'));
     }
 }
 

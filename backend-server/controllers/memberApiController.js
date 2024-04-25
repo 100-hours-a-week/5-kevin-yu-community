@@ -60,7 +60,6 @@ const method = {
     },
     profileImage: async (req, res) => {
         const members = await getMembers();
-        console.log(`members: ${members}`);
         const member = members.find(member => member.id === Number(req.query.id));
         res.json({
             image: member.image
