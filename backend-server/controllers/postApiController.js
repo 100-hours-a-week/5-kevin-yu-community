@@ -1,8 +1,6 @@
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 import fs from 'fs';
-import req from "express/lib/request.js";
-import res from "express/lib/response.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
@@ -16,13 +14,9 @@ const getBoard = async () => {
 
 const methods = {
     showPost: async (req, res) => {
-        console.log(`req.query.no = ${req.query.no}`);
-        const postNo = Number(req.query.no);
-        console.log(postNo);
+        const postNo = Number(req.params.no);
         const board = await getBoard();
-        console.log(board);
         const post = board.find(post => post.no === postNo);
-        console.log(post);
         if (post) {
             res.status(200).json(post);
         } else {

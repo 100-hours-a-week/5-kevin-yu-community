@@ -83,7 +83,10 @@ function makeCommentList(comments) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', () => {
-    fetch(`http://localhost:4000/json/post?no=${no}`)
+    const path = window.location.pathname;
+    let no = path.substring(path.lastIndexOf('/') + 1);
+
+    fetch(`http://localhost:4000/json/posts/${no}?id=${id}`)
         .then(response => response.json())
         .then(post => {
             console.log(post);

@@ -33,7 +33,7 @@ app.get('/board', (req, res) => {
 });
 
 // board.json을 쓰는 페이지는 전부 boardRouter로
-app.use('/post', postRouter);
+app.use('/posts', postRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

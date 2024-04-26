@@ -22,7 +22,7 @@ document.querySelectorAll('.menu div').forEach(div => {
                 path = '/password';
                 break;
             case '로그아웃':
-                path = '/login';
+                path = '/member/login';
         }
         window.location.href = path;
     });
