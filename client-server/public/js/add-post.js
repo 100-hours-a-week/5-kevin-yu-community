@@ -1,7 +1,9 @@
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
 // 헤더
 // 뒤로 가기 버튼
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = '/board';
+    window.location.href = `/board?id=${id}`;
 });
 
 //본문
@@ -54,15 +56,15 @@ submitButton.addEventListener('click', (e) => {
             "content": contentInput.value
         };
         // JSON API로 사용자가 입력한 데이터를 보냄
-        fetch('/json/board', {
+        fetch('/json/posts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         }).then(response => {
-            if (response.charset === 'ok') {
-                window.location.href = '/board';
+            if (response.ok) {
+                window.location.href = `/board?id=${id}`;
             }
         });
     }
