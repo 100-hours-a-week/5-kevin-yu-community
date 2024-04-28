@@ -4,6 +4,9 @@ import postController from '../controllers/postController.js';
 
 const router = express.Router();
 
+// 게시글 등록 폼 조회
+router.get('/add-form', postController.showAddForm);
+
 // 게시글 조회
 router.get('/:no', postController.showPost);
 

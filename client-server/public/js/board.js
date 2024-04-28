@@ -1,6 +1,9 @@
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
+
 // 게시글 작성 페이지로 이동
 document.querySelector('.post-button').addEventListener('click', () => {
-    window.location.href = '/post/add-form';
+    window.location.href = `/posts/add-form?id=${id}`;
 });
 
 // 조회수와 댓글의 개수를 변환하는 함수
@@ -64,9 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 이벤트 위임을 통해 특정 게시글로 이동
 document.querySelector('.post-list').addEventListener('click', (e) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    // 클릭한 게시글의 게시판 번호
     // closest() -> 가장 가까운 부모 요소 중 입력된 선택자에 해당하는 요소
     const boardNo = e.target.closest('.post').childNodes[1].value;
     window.location.href = `/posts/${boardNo}?id=${id}`;

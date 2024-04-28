@@ -7,10 +7,13 @@ const __dirname = path.resolve(dirname(__filename), '..');
 const HTML_PATH = path.join(__dirname, 'public/html');
 
 const methods = {
-    showPost: async (req, res) => {
+    showPost: (req, res) => {
         res.sendFile(path.join(HTML_PATH, 'post.html'));
     },
-    showEditForm: async (req, res) => {
+    showAddForm: (req, res) => {
+        res.sendFile(path.join(HTML_PATH, 'add-post.html'));
+    },
+    showEditForm: (req, res) => {
         res.sendFile(path.join(HTML_PATH, 'edit-post.html'));
     },
     editPost: async (req, res) => {

@@ -32,7 +32,7 @@ app.get('/board', (req, res) => {
     res.sendFile(path.join(HTML_PATH, 'board.html'))
 });
 
-// board.json을 쓰는 페이지는 전부 boardRouter로
+// board.json을 쓰는 페이지는 전부 postRouter로
 app.use('/posts', postRouter);
 
 app.listen(port, () => {

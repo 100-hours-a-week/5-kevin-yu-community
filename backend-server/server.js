@@ -12,7 +12,7 @@ server.use(express.urlencoded({extended: false}));
 server.use(express.json());
 server.use(cors({
     origin: 'http://localhost:3000',
-    methods: 'GET'
+    methods: ['GET', 'POST']
 }));
 
 // member.json을 사용하는 작업들
