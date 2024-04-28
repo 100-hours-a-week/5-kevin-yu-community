@@ -22,7 +22,7 @@ document.querySelectorAll('.menu div').forEach(div => {
                 path = '/password';
                 break;
             case '로그아웃':
-                path = '/login';
+                path = '/member/login';
         }
         window.location.href = path;
     });
@@ -36,5 +36,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     const response = await fetch(`http://localhost:4000/json/member/profile?id=${id}`);
     const data = await response.json();
     
-    document.querySelector('.header-image img').src = `../images/members/${data.image}`;
+    document.querySelector('.header-image img').src = `/images/members/${data.image}`;
 });

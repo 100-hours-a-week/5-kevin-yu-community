@@ -20,12 +20,11 @@ server.use('/json/member', memberRouter);
 
 // board.json을 사용하는 작업들
 server.use('/json/board', boardRouter);
-server.use('/json/post', postRouter);
+server.use('/json/posts', postRouter);
 
 server.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
-
 
 // server.get('/json/board', (req, res) => {
 //     res.sendFile(path.join(JSON_PATH, 'board.json'));

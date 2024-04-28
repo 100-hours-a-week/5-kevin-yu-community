@@ -9,6 +9,34 @@ const HTML_PATH = path.join(__dirname, 'public/html');
 const methods = {
     showPost: async (req, res) => {
         res.sendFile(path.join(HTML_PATH, 'post.html'));
+    },
+    showEditForm: async (req, res) => {
+        res.sendFile(path.join(HTML_PATH, 'edit-post.html'));
+    },
+    editPost: async (req, res) => {
+        const postNo = Number(req.params.no);
+        const userInput = req.body;
+
+        // TODO 사용자 입력 검증 로직 추가
+        if (userInput.title.trim() === '' || userInput.content.trim() === '') {
+            res.status(400).json({message: '사용자 입력이 올바르지 않습니다.'});
+        }
+
+        const response = await fetch(`http://localhost:4000/json/posts/${postNo}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userInput)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            res.status(200).json(data);
+        } else {
+            const json = await response.json();
+            res.status(response.status).json({message: json.message});
+        }
     }
 }
 
