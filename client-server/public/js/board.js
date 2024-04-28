@@ -69,6 +69,5 @@ document.querySelector('.post-list').addEventListener('click', (e) => {
     // 클릭한 게시글의 게시판 번호
     // closest() -> 가장 가까운 부모 요소 중 입력된 선택자에 해당하는 요소
     const boardNo = e.target.closest('.post').childNodes[1].value;
-    // 백엔드 코드 없이 path variable을 쓰는 방법이 떠오르지 않아서 query string으로 처리
     window.location.href = `/posts/${boardNo}?id=${id}`;
 });

@@ -1,8 +1,8 @@
-// query string에서 파싱한 게시글의 번호
-const no = new URLSearchParams(window.location.search).get('no');
+// path variable에서 파싱한 게시글의 번호
+const path = window.location.pathname;
+const no = path.substring(path.lastIndexOf('/') + 1);
 // query string에서 파싱한 사용자 번호
 const id = new URLSearchParams(window.location.search).get('id');
-
 
 // 헤더
 // 뒤로 가기 버튼
@@ -83,17 +83,13 @@ function makeCommentList(comments) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
-    let no = path.substring(path.lastIndexOf('/') + 1);
-
     fetch(`http://localhost:4000/json/posts/${no}?id=${id}`)
         .then(response => response.json())
         .then(post => {
-            console.log(post);
             const commentSection = document.querySelector('.comment');
             // 게시글 목록 중 query string과 게시글 번호가 똑같은 데이터를 찾음
             insertText(post);
-
+            // TODO 작성자가 아니면 수정, 삭제 버튼 숨기는 기능 추가해야 됨
             const commentList = makeCommentList(post.comments);
             commentSection.appendChild(commentList);
         }) // then
@@ -123,7 +119,7 @@ function showModal(text) {
 // 게시글 수정/삭제 버튼 이벤트 등록
 document.querySelector('.post').addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-post')) {
-        window.location.href = `/post/edit-form?no=${no}`;
+        window.location.href = `/posts/${no}/edit-form?id=${id}`;
     } else if (e.target.classList.contains('delete-post')) {
         showModal('게시글을 삭제하시겠습니까?');
     }
