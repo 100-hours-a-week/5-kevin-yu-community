@@ -9,20 +9,50 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
 const JSON_PATH = path.join(__dirname, "json/board.json");
 
-let board;
-
-const getBoard = async () => {
+const getBoardJson = async () => {
     const file = await fs.promises.readFile(JSON_PATH, 'utf8');
-    return JSON.parse(file).posts;
+    return JSON.parse(file);
 };
 
+const getBoard = async () => {
+    return getBoardJson()
+        .then(json => json.posts);
+};
+
+const getSequence = async () => {
+    return getBoardJson()
+        .then(json => json.sequence);
+};
+
+let board;
 const getPostByNo = async (req) => {
     const postNo = Number(req.params.no);
     board = await getBoard();
     return board.find(post => post.no === postNo);
 };
 
-const saveBoard = async (req) => {
+const addPost = async (userInput, nickname) => {
+    const board = await getBoard();
+    const sequence = await getSequence();
+
+    const newPost = {
+        no: sequence,
+        title: userInput.title,
+        content: userInput.content,
+        image: userInput.image,
+        writer: nickname,
+        regDt: timeUtils.getCurrentTime(),
+        like: 0,
+        comment: 0,
+        hit: 0,
+        comments: []
+    };
+    board.unshift(newPost);
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, posts : board}, null, 2));
+};
+
+const editPost = async (req) => {
     const post = await getPostByNo(req);
     const userInput = req.body;
 
@@ -37,5 +67,6 @@ const saveBoard = async (req) => {
 export default {
     getBoard,
     getPostByNo,
-    saveBoard
+    addPost,
+    editPost
 };

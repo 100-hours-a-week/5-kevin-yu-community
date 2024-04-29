@@ -1,21 +1,14 @@
-import path, {dirname} from 'path';
-import {fileURLToPath} from 'url';
-import fs from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve(dirname(__filename), '..');
-const JSON_PATH = path.join(__dirname, "json/board.json");
-
-// board.json을 읽어서, JS 객체로 변환하는 로직
-const getBoard = async () => {
-    const file = await fs.promises.readFile(JSON_PATH, 'utf8');
-    return JSON.parse(file).posts;
-}
+import postModel from "../models/postModel.js";
 
 const methods = {
     showBoard: async (req, res) => {
-        const board = await getBoard();
-        res.status(200).json(board);
+        const board = await postModel.getBoard();
+
+        if (board === undefined) {
+            res.status(500).json({message: '예상치 못한 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.'});
+        } else {
+            res.status(200).json(board);
+        }
     }
 }
 
