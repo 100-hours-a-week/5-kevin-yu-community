@@ -42,6 +42,7 @@ router.get('/info', memberController.showEditInfoForm);
 router.put('/', upload.single('file'), memberController.editMemberInfo);
 // 사용자 정보 삭제
 router.delete('/', memberController.deleteMember);
+// 비밀번호 변경 페이지 서빙
 router.get('/password', memberController.showPasswordForm);
 
 export default router;

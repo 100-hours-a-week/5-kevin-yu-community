@@ -16,5 +16,7 @@ router.get('/duplication', memberController.checkDuplication);
 router.put('/', memberController.editMember);
 // 회원정보 삭제
 router.delete('/', memberController.deleteMember);
+// 비밀번호 변경
+router.patch('/password', memberController.editPassword);
 
 export default router;

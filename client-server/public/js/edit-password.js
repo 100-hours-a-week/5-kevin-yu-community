@@ -61,6 +61,7 @@ passwordCheckInput.addEventListener('change', () => {
     const helper = document.querySelector('.password-check-helper');
     // 비밀번호와 비밀번호 확인의 입력값이 동일한지 확인
     isSameWithPassword = password === passwordCheck;
+    isSameWithPasswordCheck = password === passwordCheck;
 
     // 안내문을 위한 추가 조건 검증
     if (passwordCheck === '') {
@@ -76,12 +77,32 @@ passwordCheckInput.addEventListener('change', () => {
 
 const toast = document.querySelector('.toast-message');
 // 모든 유효성 검사를 통과했다면, 수정하기 버튼을 눌렀을 때
-editButton.addEventListener('click', () => {
+editButton.addEventListener('click', async () => {
+    const id = new URLSearchParams(window.location.search).get('id');
     if (isCollectPassword && isSameWithPasswordCheck && isSameWithPassword) {
-        toast.classList.add('active'); // 클래스를 통해 토스트 메시지를 제어
-        setTimeout(() => {
-            toast.classList.remove('active');
-        }, 1000);
+        const response = await fetch(`http://localhost:4000/json/members/password?id=${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                password: passwordInput.value
+            })
+        });
+
+        if (response.ok) {
+            toast.classList.add('active'); // 클래스를 통해 토스트 메시지를 제어
+            setTimeout(() => {
+                toast.classList.remove('active');
+                const agreement = confirm('비밀번호 수정이 완료되었습니다. 게시판으로 이동하시겠습니까?');
+                if (agreement) {
+                    window.location.href = `/board?id=${id}`;
+                }
+            }, 1000);
+        } else if (response.status === 409) {
+            response.json()
+                .then(json => alert(json.message));
+        }
     } else {
         const event = new Event('change');
         passwordInput.dispatchEvent(event);
