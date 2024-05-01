@@ -1,5 +1,6 @@
 import postModel from "../models/postModel.js";
 import memberModel from "../models/memberModel.js";
+import res from "express/lib/response.js";
 
 const addPost = async (req, res) => {
     const userInput = req.body;
@@ -23,9 +24,24 @@ const showPost = async (req, res) => {
 };
 
 const editPost = async (req, res) => {
+    let prevImage;
     try {
-        await postModel.editPost(req);
-        res.status(200).json({message: '성공적으로 수정하였습니다.'});
+        prevImage = await postModel.editPost(req);
+    } catch (error) {
+        res.status(500).json({message: '예상치 못한 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.'});
+    }
+
+    res.status(200).json({
+        message: '성공적으로 수정하였습니다.',
+        prevImage: prevImage
+    });
+};
+
+const deletePost = async (req, res) => {
+    const postNo = Number(req.params.no);
+    try {
+        const image = await postModel.deletePost(postNo);
+        res.status(200).json({image: image});
     } catch (error) {
         res.status(500).json({message: '예상치 못한 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.'});
     }
@@ -34,5 +50,6 @@ const editPost = async (req, res) => {
 export default {
     addPost,
     showPost,
-    editPost
+    editPost,
+    deletePost
 };

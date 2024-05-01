@@ -56,17 +56,40 @@ const editPost = async (req) => {
     const post = await getPostByNo(req);
     const userInput = req.body;
 
+    const prevImage = post.image;
+
     post.title = userInput.title;
     post.content = userInput.content;
+    post.image = userInput.image;
     post.regDt = timeUtils.getCurrentTime();
 
-    const json = JSON.stringify({posts: board}, null, 2);
+    const json = JSON.stringify({sequence: await getSequence(), posts: board}, null, 2);
     await fs.promises.writeFile(JSON_PATH, json);
+
+    return prevImage; // 이전 이미지를 삭제하기 위해 이미지명 반환
+};
+
+const deletePost = async (postNo) => {
+    const board = await getBoard();
+
+    const index = board.findIndex(post => post.no === postNo);
+    const image = board[index].image;
+    if (index !== -1) {
+        board.splice(index, 1);
+    } else {
+        throw new Error('Post not found');
+    }
+
+    console.log(getSequence());
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: getSequence(), posts: board}, null, 2));
+    return image;
 };
 
 export default {
     getBoard,
     getPostByNo,
     addPost,
-    editPost
+    editPost,
+    deletePost
 };

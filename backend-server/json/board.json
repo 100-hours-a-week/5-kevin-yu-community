@@ -1,6 +1,18 @@
 {
-  "sequence": 9,
+  "sequence": 10,
   "posts": [
+    {
+      "no": 9,
+      "title": "asdasd",
+      "content": "asdasdasdasd",
+      "image": "",
+      "writer": "재무책임자",
+      "regDt": "2024-05-01 12:36:45",
+      "like": 0,
+      "comment": 0,
+      "hit": 0,
+      "comments": []
+    },
     {
       "no": 8,
       "title": "안녕하세요",

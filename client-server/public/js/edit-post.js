@@ -44,20 +44,21 @@ elements.forEach(element => {
     });
 });
 
+const image = document.querySelector('#image');
 document.querySelector('.submit button').addEventListener('click', (e) => {
     if (isValidToSubmit()) {
+        const formData = new FormData();
+        formData.append('file', image.files[0]);
+        formData.append('title', title.value);
+        formData.append('content', content.value);
+
         fetch(`/posts/${no}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title: title.value,
-                content: content.value
-            })
+            body: formData
         })
             .then(response => {
                 if (response.ok) {
+                    alert('성공적으로 수정하였습니다.');
                     window.location.href = `/posts/${no}?id=${id}`
                 } else {
                     alert('수정에 실패하였습니다. 잠시 후 다시 시도해주세요.');

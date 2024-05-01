@@ -36,7 +36,13 @@ function insertText(post) {
     regDt.textContent = post.regDt;
     // 이미지
     const image = document.querySelector('.content .image img');
-    image.src = `/images/posts/${post.image}`;
+    if (post.image === '') {
+        // 이미지를 등록하지 않으면 이미지가 보이지 않도록 만듦
+        document.querySelector('.content .image').style.display = 'none';
+    } else {
+        document.querySelector('.content .image').style.display = 'block';
+        image.src = `/images/posts/${post.image}`;
+    }
     // 본문
     const content = document.querySelector('.text');
     content.textContent = post.content;
@@ -82,14 +88,22 @@ function makeCommentList(comments) {
 }
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const nickname = await fetch(`http://localhost:4000/json/member?id=${id}`)
+        .then(response => response.json())
+        .then(json => json.nickname);
+
     fetch(`http://localhost:4000/json/posts/${no}?id=${id}`)
         .then(response => response.json())
         .then(post => {
             const commentSection = document.querySelector('.comment');
-            // 게시글 목록 중 query string과 게시글 번호가 똑같은 데이터를 찾음
             insertText(post);
-            // TODO 작성자가 아니면 수정, 삭제 버튼 숨기는 기능 추가해야 됨
+
+            // 만약 작성자가 아니면 수정/삭제 버튼 숨김
+            if (post.writer !== nickname) {
+                document.querySelector('.info .buttons').style.visibility = 'hidden';
+            }
+
             const commentList = makeCommentList(post.comments);
             commentSection.appendChild(commentList);
         }) // then
@@ -154,4 +168,13 @@ document.querySelector('.comment').addEventListener('click', (e) => {
 document.querySelector('.modal .cancel').addEventListener('click', () => {
     modal.style.display = 'none';
     modalBackground.style.display = 'none';
+});
+
+// 모달 확인 버튼
+document.querySelector('.modal .confirm').addEventListener('click', () => {
+    fetch(`http://localhost:3000/posts/${no}`, {
+        method: 'DELETE'
+    })
+        .then(response => response.json())
+        .then(json => console.log(json));
 });
