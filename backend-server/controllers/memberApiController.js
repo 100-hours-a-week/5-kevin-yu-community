@@ -70,10 +70,24 @@ const editMember = async (req, res) => {
     res.status(200).json({message: '회원정보 수정이 성공적으로 완료되었습니다.'});
 };
 
+const deleteMember = async (req, res) => {
+    let prevImage;
+    try {
+        prevImage = await memberModel.deleteMember(req);
+    } catch (error) {
+        res.status(500).json({message: '탈퇴에 실패했습니다. 잠시 후 다시 시도해주세요.'});
+    }
+    res.status(200).json({
+        prevImage: prevImage,
+        message: '회원 탈퇴를 완료했습니다. 이용해주셔서 감사합니다.'
+    });
+};
+
 export default {
     loginCheck,
     join,
     findMemberById,
     checkDuplication,
-    editMember
+    editMember,
+    deleteMember
 };
