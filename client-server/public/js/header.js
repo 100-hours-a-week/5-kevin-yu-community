@@ -16,15 +16,15 @@ document.querySelectorAll('.menu div').forEach(div => {
         let path;
         switch (div.textContent) {
             case '회원정보수정':
-                path = '/member';
+                path = '/members/info';
                 break;
             case '비밀번호수정':
-                path = '/password';
+                path = '/members/password';
                 break;
             case '로그아웃':
-                path = '/member/login';
+                path = '/members/login';
         }
-        window.location.href = path;
+        window.location.href = path + window.location.search;
     });
 });
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
-    const response = await fetch(`http://localhost:4000/json/member?id=${id}`);
+    const response = await fetch(`http://localhost:4000/json/members?id=${id}`);
     const json = await response.json();
     
     document.querySelector('.header-image img').src = `/images/members/${json.image}`;

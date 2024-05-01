@@ -16,7 +16,7 @@ server.use(cors({
 }));
 
 // member.json을 사용하는 작업들
-server.use('/json/member', memberRouter);
+server.use('/json/members', memberRouter);
 
 // board.json을 사용하는 작업들
 server.use('/json/board', boardRouter);

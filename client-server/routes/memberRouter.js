@@ -37,4 +37,10 @@ router.get('/join', (req, res) => {
 // 사용자가 회원가입 시도
 router.post('/join', upload.single('file'), memberController.join);
 
+router.get('/info', memberController.showEditInfoForm);
+
+router.put('/', upload.single('file'), memberController.editMemberInfo);
+
+router.get('/password', memberController.showPasswordForm);
+
 export default router;

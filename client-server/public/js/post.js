@@ -89,7 +89,7 @@ function makeCommentList(comments) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', async () => {
-    const nickname = await fetch(`http://localhost:4000/json/member?id=${id}`)
+    const nickname = await fetch(`http://localhost:4000/json/members?id=${id}`)
         .then(response => response.json())
         .then(json => json.nickname);
 
@@ -175,6 +175,10 @@ document.querySelector('.modal .confirm').addEventListener('click', () => {
     fetch(`http://localhost:3000/posts/${no}`, {
         method: 'DELETE'
     })
-        .then(response => response.json())
-        .then(json => console.log(json));
+        .then(response => {
+            if (response.ok) {
+                alert('게시글을 성공적으로 삭제하였습니다.');
+                window.location.href = `/board?id=${id}`;
+            }
+        })
 });
