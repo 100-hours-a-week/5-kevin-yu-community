@@ -10,5 +10,9 @@ router.get('/', memberController.findMemberById);
 router.post('/login', memberController.loginCheck);
 // 회원가입 정보를 검증하고 가입 결과를 반환
 router.post('/join', memberController.join);
+// 회원정보 중복체크
+router.get('/duplication', memberController.checkDuplication);
+// 회원정보 수정
+router.put('/', memberController.editMember);
 
 export default router;

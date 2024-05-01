@@ -89,7 +89,7 @@ function makeCommentList(comments) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', async () => {
-    const nickname = await fetch(`http://localhost:4000/json/member?id=${id}`)
+    const nickname = await fetch(`http://localhost:4000/json/members?id=${id}`)
         .then(response => response.json())
         .then(json => json.nickname);
 

@@ -64,7 +64,7 @@ loginButton.addEventListener('click', () => {
         const password = passwordInput.value;
         // 클라이언트 서버에 로그인 정보를 보냄
         // 클라이언트 서버는 JSON API 서버에서 JSON을 받아서 비교 후 로그인 처리
-        fetch('/member/login', {
+        fetch('/members/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

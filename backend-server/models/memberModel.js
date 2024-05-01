@@ -1,6 +1,7 @@
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 import fs from 'fs';
+import req from "express/lib/request.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
@@ -22,7 +23,7 @@ const getMembers = async () => {
 };
 
 const getMemberById = async (req) => {
-    const members = await getMembers();
+   const members = await getMembers();
     return members.find(member => member.id === Number(req.query.id));
 };
 
@@ -39,12 +40,24 @@ const saveMember = async (userInput) => {
     };
     members.push(newMember);
 
-
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, members : members}, null, 2));
+};
+
+const editMember = async (req, userInput) => {
+    const members = await getMembers();
+    const member = members.find(member => member.id === Number(req.query.id));
+
+    member.nickname = userInput.nickname;
+    if (userInput.image !== '') {
+        member.image = userInput.image;
+    }
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members : members}, null, 2));
 };
 
 export default {
     getMembers,
     getMemberById,
-    saveMember
+    saveMember,
+    editMember
 };

@@ -21,11 +21,11 @@ app.use(express.json());
 
 // root로 접속하면 우선 로그인 페이지로
 app.get('/', (req, res) => {
-    res.redirect('/member/login');
+    res.redirect('/members/login');
 });
 
 // member.json을 쓰는 페이지는 전부 memberRouter로
-app.use('/member', memberRouter);
+app.use('/members', memberRouter);
 
 // 게시판은 바로 파일만 전달
 app.get('/board', (req, res) => {
