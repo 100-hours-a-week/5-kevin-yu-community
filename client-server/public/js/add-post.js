@@ -10,6 +10,7 @@ document.querySelector('.back').addEventListener('click', () => {
 const titleInput = document.querySelector('#title');
 const contentInput = document.querySelector('#content');
 const helper = document.querySelector('.helper');
+const imageInput = document.querySelector('#image');
 const submitButton = document.querySelector('button');
 
 // 처음엔 확인하지 않았으므로 false로 초기화
@@ -26,6 +27,8 @@ function changeButtonState() {
         helper.style.visibility = 'hidden';
     }
 }
+
+
 
 // 사용자가 제목을 입력했을 때
 titleInput.addEventListener('change', () => {
@@ -51,17 +54,15 @@ submitButton.addEventListener('click', (e) => {
         // 사용자가 입력을 모두 완료하지 않았을 경우, submit 하지 못하도록 만듦
         e.preventDefault();
     } else {
-        const data = {
-            "title": titleInput.value,
-            "content": contentInput.value
-        };
+        const formData = new FormData();
+        formData.append('file', imageInput.files[0]);
+        formData.append('title', titleInput.value);
+        formData.append('content', contentInput.value);
+
         // JSON API로 사용자가 입력한 데이터를 보냄
-        fetch('/json/posts', {
+        fetch(`/posts?id=${id}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+            body: formData
         }).then(response => {
             if (response.ok) {
                 window.location.href = `/board?id=${id}`;
@@ -69,5 +70,3 @@ submitButton.addEventListener('click', (e) => {
         });
     }
 });
-
-

@@ -13,4 +13,7 @@ router.get('/:no', postApiController.showPost);
 // 게시글 수정
 router.put('/:no', postApiController.editPost);
 
+// 게시글 삭제
+router.delete('/:no', postApiController.deletePost);
+
 export default router;
