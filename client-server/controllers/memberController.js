@@ -86,10 +86,25 @@ const editMemberInfo = async (req, res) => {
         })
     });
 
+    const json = await response.json();
     if (response.ok) {
-        res.sendStatus(200);
+        res.status(200).json(json.message);
     } else {
-        res.sendStatus(500);
+        res.status(500).json(json.message);
+    }
+};
+
+const deleteMember = async (req, res) => {
+    const response = await fetch(`http://localhost:4000/json/members?id=${req.query.id}`, {
+        method: 'DELETE'
+    });
+
+    const json = await response.json();
+    if (response.ok) {
+        imageUtils.deleteImage(json.prevImage);
+        res.status(200).json({message: json.message});
+    } else {
+        res.status(500).json({message: json.message});
     }
 };
 
@@ -102,5 +117,6 @@ export default {
     join,
     showEditInfoForm,
     editMemberInfo,
+    deleteMember,
     showPasswordForm
 };

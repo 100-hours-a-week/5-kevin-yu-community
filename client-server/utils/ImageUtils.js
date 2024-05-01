@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
 
 const deleteImage = (filename) => {
-    const filePath = path.join(__dirname, 'public/images/posts', filename);
+    const filePath = path.join(__dirname, 'public/images/members', filename);
     fs.unlink(filePath, err => {
         if (err) {
             console.error(`Cannot delete file: ${err}`);

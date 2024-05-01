@@ -36,11 +36,13 @@ router.get('/join', (req, res) => {
 });
 // 사용자가 회원가입 시도
 router.post('/join', upload.single('file'), memberController.join);
-
+// 사용자 정보 수정 페이지 서빙
 router.get('/info', memberController.showEditInfoForm);
-
+// 사용자 정보 수정
 router.put('/', upload.single('file'), memberController.editMemberInfo);
-
+// 사용자 정보 삭제
+router.delete('/', memberController.deleteMember);
+// 비밀번호 변경 페이지 서빙
 router.get('/password', memberController.showPasswordForm);
 
 export default router;

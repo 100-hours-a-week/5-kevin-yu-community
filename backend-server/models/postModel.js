@@ -77,7 +77,7 @@ const deletePost = async (postNo) => {
     if (index !== -1) {
         board.splice(index, 1);
     } else {
-        throw new Error('Post not found');
+        throw new Error('게시글 정보를 찾을 수 없습니다.');
     }
 
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));

@@ -105,8 +105,18 @@ document.querySelector('.quit').addEventListener('click', (e) => {
     showModal();
 });
 
-document.querySelector('.modal .confirm').addEventListener('click', () => {
-    window.location.href = '/members/login';
+document.querySelector('.modal .confirm').addEventListener('click', async () => {
+    const response = await fetch(`/members?id=${id}`, {
+        method: 'DELETE'
+    });
+
+    const json = await response.json();
+    if (response.ok) {
+        alert(json.message);
+        window.location.href = '/members/login';
+    } else {
+        alert(json.message);
+    }
 });
 
 // 모달 취소 버튼

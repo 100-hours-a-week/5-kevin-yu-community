@@ -43,21 +43,52 @@ const saveMember = async (userInput) => {
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, members : members}, null, 2));
 };
 
-const editMember = async (req, userInput) => {
+const editMember = async (req) => {
     const members = await getMembers();
     const member = members.find(member => member.id === Number(req.query.id));
+    const userInput = req.body;
 
-    member.nickname = userInput.nickname;
-    if (userInput.image !== '') {
-        member.image = userInput.image;
+    const nickname = userInput.nickname;
+    const image = userInput.image;
+    const password = userInput.password;
+
+    if (nickname !== '' && nickname !== undefined) {
+        member.nickname = nickname;
+    }
+    if (image !== '' && image !== undefined) {
+        member.image = image;
+    }
+    if (password !== '' && password !== undefined) {
+        if (member.password === password) {
+            return false;
+        }
+        member.password = password;
     }
 
-    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members : members}, null, 2));
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members: members}, null, 2));
+    return true;
+};
+
+const deleteMember = async (req) => {
+    const members = await getMembers();
+
+    const id = Number(req.query.id);
+    const index = members.findIndex(member => member.id === id);
+    const prevImage = members[index].image;
+    if (index !== -1) {
+        members.splice(index, 1);
+    } else {
+        throw new Error('회원 정보를 찾을 수 없습니다.');
+    }
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members: members}, null, 2));
+    return prevImage;
 };
 
 export default {
     getMembers,
     getMemberById,
     saveMember,
-    editMember
+    editMember,
+    deleteMember
 };
