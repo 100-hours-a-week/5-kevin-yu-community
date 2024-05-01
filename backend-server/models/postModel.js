@@ -73,17 +73,15 @@ const deletePost = async (postNo) => {
     const board = await getBoard();
 
     const index = board.findIndex(post => post.no === postNo);
-    const image = board[index].image;
+    const prevImage = board[index].image;
     if (index !== -1) {
         board.splice(index, 1);
     } else {
         throw new Error('Post not found');
     }
 
-    console.log(getSequence());
-
-    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: getSequence(), posts: board}, null, 2));
-    return image;
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
+    return prevImage;
 };
 
 export default {

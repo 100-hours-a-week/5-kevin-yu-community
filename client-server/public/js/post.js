@@ -175,6 +175,10 @@ document.querySelector('.modal .confirm').addEventListener('click', () => {
     fetch(`http://localhost:3000/posts/${no}`, {
         method: 'DELETE'
     })
-        .then(response => response.json())
-        .then(json => console.log(json));
+        .then(response => {
+            if (response.ok) {
+                alert('게시글을 성공적으로 삭제하였습니다.');
+                window.location.href = `/board?id=${id}`;
+            }
+        })
 });

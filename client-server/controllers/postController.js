@@ -63,12 +63,11 @@ const editPost = async (req, res) => {
         })
     });
 
+    const json = await response.json();
     if (response.ok) {
-        const data = await response.json();
-        imageUtils.deleteImage(data.prevImage);
-        res.status(200).json(data);
+        imageUtils.deleteImage(json.prevImage);
+        res.status(200).json(json);
     } else {
-        const json = await response.json();
         res.status(response.status).json({message: json.message});
     }
 };
@@ -81,11 +80,11 @@ const deletePost = async (req, res) => {
     });
 
     const json = await response.json();
-
-    console.log(json);
-
     if (response.ok) {
-        imageUtils.deleteImage(json.image);
+        imageUtils.deleteImage(json.prevImage);
+        res.status(200).json(json);
+    } else {
+        res.status(response.status).json({message: json.message});
     }
 };
 
