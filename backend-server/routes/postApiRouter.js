@@ -7,6 +7,13 @@ const router = express.Router();
 // 게시글 등록
 router.post('/', postApiController.addPost);
 
+// path variable이 있으면 구체적인 path부터 우선 처리
+// 댓글 조회
+router.get('/:no/comments', postApiController.showComments);
+
+// 댓글 등록
+router.post('/:no/comments', postApiController.addComment);
+
 // 게시글 데이터 조회
 router.get('/:no', postApiController.showPost);
 

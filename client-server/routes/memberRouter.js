@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 
 import memberController from '../controllers/memberController.js';
 import imageUtils from "../utils/ImageUtils.js";
