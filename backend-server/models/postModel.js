@@ -24,7 +24,7 @@ const getSequence = async () => {
         .then(json => json.sequence);
 };
 
-let board;
+let board; // getPostByNo에서 찾은 board를 다른 함수에서도 사용하기 위해
 const getPostByNo = async (postNo) => {
     board = await getBoard();
     return board.find(post => post.no === postNo);
@@ -87,5 +87,5 @@ export default {
     getPostByNo,
     addPost,
     editPost,
-    deletePost
+    deletePost,
 };

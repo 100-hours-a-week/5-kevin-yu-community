@@ -1,4 +1,5 @@
 import memberModel from "../models/memberModel.js";
+import req from "express/lib/request.js";
 
 const methods = {
     async loginCheck(req, res) {
@@ -37,7 +38,8 @@ const methods = {
         }
     },
     async findMemberById(req, res) {
-        const member = await memberModel.getMemberById(req);
+        const memberId = Number(req.query.id);
+        const member = await memberModel.getMemberById(memberId);
 
         if (member === undefined) {
             res.status(404).json({message: '회원정보가 존재하지 않습니다.'});
@@ -57,17 +59,21 @@ const methods = {
         }
     },
     async editMember(req, res) {
+        const memberId = Number(req.query.id);
+        const userInput = req.body;
+
         try {
-            await memberModel.editMember(req);
+            await memberModel.editMember(memberId, userInput);
         } catch (error) {
             res.status(500).json({message: '회원정보 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
         res.status(200).json({message: '회원정보 수정이 성공적으로 완료되었습니다.'});
     },
     async deleteMember(req, res) {
+        const memberId = Number(req.query.id);
         let prevImage;
         try {
-            prevImage = await memberModel.deleteMember(req);
+            prevImage = await memberModel.deleteMember(memberId);
         } catch (error) {
             res.status(500).json({message: '탈퇴에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
@@ -77,8 +83,11 @@ const methods = {
         });
     },
     async editPassword(req, res) {
+        const memberId = Number(req.query.id);
+        const userInput = req.body;
+
         try {
-            const result = await memberModel.editMember(req);
+            const result = await memberModel.editMember(memberId, userInput);
             if (!result) {
                 res.status(409).json({message: '기존 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다.'});
                 return;

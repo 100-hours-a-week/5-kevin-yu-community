@@ -56,7 +56,12 @@ function insertText(post) {
 
 // 댓글 리스트 생성
 const commentList = document.querySelector('.comment-list');
-function makeCommentList(comments) {
+
+async function makeCommentList(postNo) {
+    const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments`);
+    const json = await response.json();
+    const comments = json.commentList.comments;
+
     comments.forEach(comment => {
         // 댓글 요소 생성
         const commentElement = document.createElement('div');
@@ -69,6 +74,7 @@ function makeCommentList(comments) {
                 </div>
             </div>
             <div class="center">
+                <div style="display:none">${comment.no}</div>
                 <div>
                     <div class="nickname bold">${comment.writer}</div>
                     <div class="date regular">${comment.regDt}</div>
@@ -104,13 +110,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.querySelector('.info .buttons').style.visibility = 'hidden';
             }
 
-            const commentList = makeCommentList(post.comments);
+            const commentList = makeCommentList(post.no);
             commentSection.appendChild(commentList);
         }) // then
         .catch(error => console.log(`Error: ${error}`));
 });
 
-// 댓글 입력 시 댓글 등록 버튼 상태를 변경 -> 과제 3에서 저장 기능 구현해야 함
+// 댓글 입력 시 댓글 등록 버튼 상태를 변경
 const commentTextarea = document.querySelector('.comment-text textarea');
 const commentButton = document.querySelector('.comment-button');
 commentTextarea.addEventListener('keyup', () => {
@@ -136,6 +142,29 @@ document.querySelector('.post').addEventListener('click', (e) => {
         window.location.href = `/posts/${no}/edit-form?id=${id}`;
     } else if (e.target.classList.contains('delete-post')) {
         showModal('게시글을 삭제하시겠습니까?');
+    }
+});
+
+// 댓글 등록 기능
+document.querySelector('.comment-button').addEventListener('click', async () => {
+    const comment = commentTextarea.value;
+
+    if (comment.trim() === '') return;
+
+    const response = await fetch(`http://localhost:4000/json/posts/${no}/comments?id=${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({comment})
+    });
+
+    const json = await response.json();
+    if (response.ok) {
+        alert(json.message);
+        window.location.reload();
+    } else {
+        alert(json.message);
     }
 });
 
@@ -172,7 +201,14 @@ document.querySelector('.modal .cancel').addEventListener('click', () => {
 
 // 모달 확인 버튼
 document.querySelector('.modal .confirm').addEventListener('click', () => {
-    fetch(`http://localhost:3000/posts/${no}`, {
+    const modalText = document.querySelector('.modal p:first-child').textContent;
+    let path = `http://localhost:3000/posts/${no}`;
+
+    if (modalText.includes('댓글')) {
+        path += '/comments';
+    }
+
+    fetch(path, {
         method: 'DELETE'
     })
         .then(response => {
@@ -180,5 +216,5 @@ document.querySelector('.modal .confirm').addEventListener('click', () => {
                 alert('게시글을 성공적으로 삭제하였습니다.');
                 window.location.href = `/board?id=${id}`;
             }
-        })
+        });
 });
