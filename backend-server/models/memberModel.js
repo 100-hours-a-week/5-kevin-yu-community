@@ -22,9 +22,9 @@ const getMembers = async () => {
         .then(json => json.members);
 };
 
-const getMemberById = async (req) => {
+const getMemberById = async (memberId) => {
    const members = await getMembers();
-    return members.find(member => member.id === Number(req.query.id));
+    return members.find(member => member.id === memberId);
 };
 
 const saveMember = async (userInput) => {
@@ -43,10 +43,9 @@ const saveMember = async (userInput) => {
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, members : members}, null, 2));
 };
 
-const editMember = async (req) => {
+const editMember = async (memberId, userInput) => {
     const members = await getMembers();
-    const member = members.find(member => member.id === Number(req.query.id));
-    const userInput = req.body;
+    const member = members.find(member => member.id === memberId);
 
     const nickname = userInput.nickname;
     const image = userInput.image;
@@ -69,11 +68,10 @@ const editMember = async (req) => {
     return true;
 };
 
-const deleteMember = async (req) => {
+const deleteMember = async (memberId) => {
     const members = await getMembers();
 
-    const id = Number(req.query.id);
-    const index = members.findIndex(member => member.id === id);
+    const index = members.findIndex(member => member.id === memberId);
     const prevImage = members[index].image;
     if (index !== -1) {
         members.splice(index, 1);

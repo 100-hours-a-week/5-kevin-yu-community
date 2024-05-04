@@ -25,8 +25,7 @@ const getSequence = async () => {
 };
 
 let board;
-const getPostByNo = async (req) => {
-    const postNo = Number(req.params.no);
+const getPostByNo = async (postNo) => {
     board = await getBoard();
     return board.find(post => post.no === postNo);
 };
@@ -52,9 +51,8 @@ const addPost = async (userInput, nickname) => {
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, posts : board}, null, 2));
 };
 
-const editPost = async (req) => {
-    const post = await getPostByNo(req);
-    const userInput = req.body;
+const editPost = async (postNo, userInput) => {
+    const post = await getPostByNo(postNo);
 
     const prevImage = post.image;
 
