@@ -4,15 +4,14 @@ import {fileURLToPath} from "url";
 import imageUtils from "../utils/ImageUtils.js";
 
 const __filename = fileURLToPath(import.meta.url);
-// path.resolve -> __dirname이 route의 하위 경로이므로, route의 상위 디렉토리로 이동해야 public에 접근 가능
 const __dirname = path.resolve(dirname(__filename), '..');
 const HTML_PATH = path.join(__dirname, 'public/html');
 
 const methods = {
-    showLoginForm: (req, res) => {
+    showLoginForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'login.html'));
     },
-    loginCheck: async (req, res) => {
+    async loginCheck(req, res) {
         try {
             const userInput = req.body;
             const emailRegExp = /^[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,3}$/;
@@ -42,10 +41,10 @@ const methods = {
             res.sendStatus(500);
         }
     },
-    showJoinForm: (req, res) => {
+    showJoinForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'join.html'));
     },
-    join: async (req, res) => {
+    async join(req, res) {
         const newUser = {
             ...req.body,
             image: req.file.filename
@@ -66,10 +65,10 @@ const methods = {
             res.status(response.status).json(data);
         });
     },
-    showEditInfoForm: (req, res) => {
+    showEditInfoForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'edit-member.html'));
     },
-    editMemberInfo: async (req, res) => {
+    async editMemberInfo(req, res) {
         const response = await fetch(`http://localhost:4000/json/members?id=${req.query.id}`, {
             method: 'PUT',
             headers: {
@@ -88,7 +87,7 @@ const methods = {
             res.status(500).json(json.message);
         }
     },
-    deleteMember: async (req, res) => {
+    async deleteMember(req, res) {
         const response = await fetch(`http://localhost:4000/json/members?id=${req.query.id}`, {
             method: 'DELETE'
         });
@@ -101,7 +100,7 @@ const methods = {
             res.status(500).json({message: json.message});
         }
     },
-    showPasswordForm: (req, res) => {
+    showPasswordForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'edit-password.html'));
     }
 }

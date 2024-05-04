@@ -1,7 +1,7 @@
 import postModel from "../models/postModel.js";
 
 const methods = {
-    showBoard: async (req, res) => {
+    async showBoard(req, res) {
         const board = await postModel.getBoard();
 
         if (board === undefined) {
