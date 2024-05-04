@@ -7,16 +7,16 @@ const __dirname = path.resolve(dirname(__filename), '..');
 const HTML_PATH = path.join(__dirname, 'public/html');
 
 const methods = {
-    showPost: (req, res) => {
+    showPost(req, res) {
         res.sendFile(path.join(HTML_PATH, 'post.html'));
     },
-    showAddForm: (req, res) => {
+    showAddForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'add-post.html'));
     },
-    showEditForm: (req, res) => {
+    showEditForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'edit-post.html'));
     },
-    addPost: async (req, res) => {
+    async addPost(req, res) {
         const response = await fetch(`http://localhost:4000/json/posts?id=${req.query.id}`, {
             method: 'POST',
             body: JSON.stringify({
@@ -34,7 +34,7 @@ const methods = {
             res.status(response.status).json(data);
         });
     },
-    editPost: async (req, res) => {
+    async editPost(req, res) {
         const postNo = Number(req.params.no);
         const userInput = req.body;
         if (userInput.title.trim() === '' || userInput.content.trim() === '') {
@@ -58,7 +58,7 @@ const methods = {
             res.status(response.status).json({message: json.message});
         }
     },
-    deletePost: async (req, res) => {
+    async deletePost(req, res) {
         const postNo = Number(req.params.no);
         const response = await fetch(`http://localhost:4000/json/posts/${postNo}`, {
             method: 'DELETE'
@@ -70,7 +70,7 @@ const methods = {
         } else {
             res.status(response.status).json({message: json.message});
         }
-    }
+    },
 }
 
 export default methods;
