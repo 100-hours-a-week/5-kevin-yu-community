@@ -1,7 +1,6 @@
 import postModel from "../models/postModel.js";
 import memberModel from "../models/memberModel.js";
 import commentModel from "../models/commentModel.js";
-import req from "express/lib/request.js";
 
 const methods = {
     async addPost(req, res) {
@@ -10,8 +9,9 @@ const methods = {
         const member = await memberModel.getMemberById(memberId);
 
         try {
-            await postModel.addPost(userInput, member.nickname);
-            res.status(200).json({message: '성공적으로 수정하였습니다.'});
+            const postNo = await postModel.addPost(userInput, member.nickname);
+            await commentModel.makeCommentObject(postNo);
+            res.status(200).json({message: '성공적으로 등록하였습니다.'});
         } catch (error) {
             res.status(500).json({message: '예상치 못한 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.'});
         }
@@ -33,19 +33,20 @@ const methods = {
         let prevImage;
         try {
             prevImage = await postModel.editPost(postNo, userInput);
+            res.status(200).json({
+                message: '성공적으로 수정하였습니다.',
+                prevImage: prevImage
+            });
         } catch (error) {
             res.status(500).json({message: '예상치 못한 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.'});
         }
 
-        res.status(200).json({
-            message: '성공적으로 수정하였습니다.',
-            prevImage: prevImage
-        });
     },
     async deletePost(req, res) {
         const postNo = Number(req.params.no);
         try {
             const prevImage = await postModel.deletePost(postNo);
+            await commentModel.deleteCommentObject(postNo);
             res.status(200).json({
                 message: '성공적으로 수정하였습니다.',
                 prevImage: prevImage
@@ -71,10 +72,10 @@ const methods = {
 
         try {
             await commentModel.saveComment(postNo, member, comment);
+            res.status(200).json({message: '댓글이 성공적으로 등록되었습니다.'});
         } catch (error) {
             res.status(500).json({message: '댓글 등록에 실패하였습니다. 잠시 후 다시 시도해주세요.'});
         }
-        res.status(200).json({message: '댓글이 성공적으로 등록되었습니다.'});
     },
     async editComment(req, res) {
         const postNo = Number(req.params.postNo);
@@ -82,10 +83,10 @@ const methods = {
 
         try {
             await commentModel.editComment(postNo, commentNo, req.body.content);
+            res.status(200).json({message: '댓글을 성공적으로 수정하였습니다.'});
         } catch (error) {
             res.status(500).json({message: '댓글 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
-        res.status(200).json({message: '댓글을 성공적으로 수정하였습니다.'});
     },
     async deleteComment(req, res) {
         const postNo = Number(req.params.postNo);
@@ -93,10 +94,10 @@ const methods = {
 
         try {
             await commentModel.deleteComment(postNo, commentNo);
+            res.status(200).json({message: '댓글을 성공적으로 삭제하였습니다.'});
         } catch (error) {
             res.status(500).json({message: '댓글 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
-        res.status(200).json({message: '댓글을 성공적으로 삭제하였습니다.'});
     }
 };
 

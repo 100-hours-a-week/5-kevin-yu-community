@@ -20,6 +20,23 @@ const findCommentsByPostNo = async (postNo) => {
     return json[postNo];
 };
 
+// 새로운 게시글이 등록되면 새로운 댓글 객체를 만들어서 JSON에 추가
+const makeCommentObject = async (postNo) => {
+    const json = await getCommentJson();
+    json[postNo] = {
+        sequence: 1,
+        comments: []
+    };
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+};
+
+// 게시글이 삭제되면 연결되어 있는 댓글 객체도 함께 제거
+const deleteCommentObject = async (postNo) => {
+    const json = await getCommentJson();
+    delete json[postNo];
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+};
+
 const saveComment = async (postNo, member, content) => {
     const findComments = await findCommentsByPostNo(postNo);
     const newComment = {
@@ -61,6 +78,8 @@ const deleteComment = async (postNo, commentNo) => {
 
 export default {
     findCommentsByPostNo,
+    makeCommentObject,
+    deleteCommentObject,
     saveComment,
     editComment,
     deleteComment

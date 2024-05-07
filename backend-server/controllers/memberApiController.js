@@ -64,23 +64,23 @@ const methods = {
 
         try {
             await memberModel.editMember(memberId, userInput);
+            res.status(200).json({message: '회원정보 수정이 성공적으로 완료되었습니다.'});
         } catch (error) {
             res.status(500).json({message: '회원정보 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
-        res.status(200).json({message: '회원정보 수정이 성공적으로 완료되었습니다.'});
     },
     async deleteMember(req, res) {
         const memberId = Number(req.query.id);
         let prevImage;
         try {
             prevImage = await memberModel.deleteMember(memberId);
+            res.status(200).json({
+                prevImage: prevImage,
+                message: '회원 탈퇴를 완료했습니다. 이용해주셔서 감사합니다.'
+            });
         } catch (error) {
             res.status(500).json({message: '탈퇴에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
-        res.status(200).json({
-            prevImage: prevImage,
-            message: '회원 탈퇴를 완료했습니다. 이용해주셔서 감사합니다.'
-        });
     },
     async editPassword(req, res) {
         const memberId = Number(req.query.id);
@@ -92,10 +92,10 @@ const methods = {
                 res.status(409).json({message: '기존 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다.'});
                 return;
             }
+            res.status(200).json({message: '비밀번호 수정이 성공적으로 완료되었습니다.'});
         } catch (error) {
             res.status(500).json({message: '비밀번호 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }
-        res.status(200).json({message: '비밀번호 수정이 성공적으로 완료되었습니다.'});
     },
 };
 
