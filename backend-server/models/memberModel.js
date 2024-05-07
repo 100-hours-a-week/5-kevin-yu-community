@@ -62,12 +62,15 @@ const editMember = async (memberId, userInput) => {
     if (nickname !== '' && nickname !== undefined) {
         member.nickname = nickname;
     }
+
+    let prevImage = '';
     if (image !== '' && image !== undefined) {
+        prevImage = member.image;
         member.image = image;
     }
 
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members: members}, null, 2));
-    return prevNickname;
+    return {prevNickname, prevImage};
 };
 
 const editPassword = async (memberId, userInput) => {
