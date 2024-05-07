@@ -35,7 +35,33 @@ const saveComment = async (postNo, member, content) => {
     await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
 };
 
+const editComment = async (postNo, commentNo, newContent) => {
+    const findComments = await findCommentsByPostNo(postNo);
+    const comment = findComments.comments.find(comment => comment.no === commentNo);
+    if (comment) {
+        comment.content = newContent;
+    } else {
+        throw new Error('댓글 정보를 찾을 수 없습니다.');
+    }
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+}
+
+const deleteComment = async (postNo, commentNo) => {
+    const findComments = await findCommentsByPostNo(postNo);
+    const index = findComments.comments.findIndex(comment => comment.no === commentNo);
+    if (index !== -1) {
+        findComments.comments.splice(index, 1);
+    } else {
+        throw new Error('댓글 정보를 찾을 수 없습니다.');
+    }
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+}
+
 export default {
     findCommentsByPostNo,
-    saveComment
+    saveComment,
+    editComment,
+    deleteComment
 };

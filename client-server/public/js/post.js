@@ -1,6 +1,6 @@
 // path variable에서 파싱한 게시글의 번호
 const path = window.location.pathname;
-const no = path.substring(path.lastIndexOf('/') + 1);
+const postNo = path.substring(path.lastIndexOf('/') + 1);
 // query string에서 파싱한 사용자 번호
 const id = new URLSearchParams(window.location.search).get('id');
 
@@ -74,7 +74,7 @@ async function makeCommentList(postNo) {
                 </div>
             </div>
             <div class="center">
-                <div style="display:none">${comment.no}</div>
+                <div class="comment-no" style="display:none">${comment.no}</div>
                 <div>
                     <div class="nickname bold">${comment.writer}</div>
                     <div class="date regular">${comment.regDt}</div>
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .then(response => response.json())
         .then(json => json.nickname);
 
-    fetch(`http://localhost:4000/json/posts/${no}?id=${id}`)
+    fetch(`http://localhost:4000/json/posts/${postNo}?id=${id}`)
         .then(response => response.json())
         .then(post => {
             const commentSection = document.querySelector('.comment');
@@ -139,7 +139,7 @@ function showModal(text) {
 // 게시글 수정/삭제 버튼 이벤트 등록
 document.querySelector('.post').addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-post')) {
-        window.location.href = `/posts/${no}/edit-form?id=${id}`;
+        window.location.href = `/posts/${postNo}/edit-form?id=${id}`;
     } else if (e.target.classList.contains('delete-post')) {
         showModal('게시글을 삭제하시겠습니까?');
     }
@@ -151,7 +151,7 @@ document.querySelector('.comment-button').addEventListener('click', async () => 
 
     if (comment.trim() === '') return;
 
-    const response = await fetch(`http://localhost:4000/json/posts/${no}/comments?id=${id}`, {
+    const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments?id=${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -168,8 +168,12 @@ document.querySelector('.comment-button').addEventListener('click', async () => 
     }
 });
 
+
 // 댓글 수정/삭제 버튼 이벤트 등록
-document.querySelector('.comment').addEventListener('click', (e) => {
+let commentNo;
+document.querySelector('.comment').addEventListener('click', async (e) => {
+    commentNo = e.target.closest('.comment-element').querySelector('.comment-no').textContent;
+
     if (e.target.classList.contains('edit-comment')) {
         // 댓글 정보가 표시되는 영역
         const commentText = e.target.closest('.comment-element').querySelector('.center');
@@ -185,6 +189,22 @@ document.querySelector('.comment').addEventListener('click', (e) => {
             before = document.createElement('p');
             after = commentText.querySelector('textarea');
             before.textContent = after.value;
+            // UI를 변경한 후에 실제로 서버에 데이터를 전송
+            const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments/${commentNo}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({content: before.textContent})
+            });
+
+            if (!response.ok) {
+                response.json()
+                    .then(json => {
+                        alert(json.message);
+                    });
+                return;
+            }
         }
         after.remove();
         commentText.appendChild(before);
@@ -202,10 +222,13 @@ document.querySelector('.modal .cancel').addEventListener('click', () => {
 // 모달 확인 버튼
 document.querySelector('.modal .confirm').addEventListener('click', () => {
     const modalText = document.querySelector('.modal p:first-child').textContent;
-    let path = `http://localhost:3000/posts/${no}`;
+    let path;
 
-    if (modalText.includes('댓글')) {
-        path += '/comments';
+    const isCommentModal = modalText.includes('댓글');
+    if (isCommentModal) {
+        path = `http://localhost:4000/json/posts/${postNo}/comments/${commentNo}`;
+    } else {
+        path = `http://localhost:3000/posts/${postNo}`;
     }
 
     fetch(path, {
@@ -213,8 +236,13 @@ document.querySelector('.modal .confirm').addEventListener('click', () => {
     })
         .then(response => {
             if (response.ok) {
-                alert('게시글을 성공적으로 삭제하였습니다.');
-                window.location.href = `/board?id=${id}`;
+                if (isCommentModal) {
+                    alert(`댓글을 성공적으로 삭제하였습니다.`);
+                    window.location.reload();
+                } else {
+                    alert(`게시글을 성공적으로 삭제하였습니다.`);
+                    window.location.href = `/board?id=${id}`;
+                }
             }
         });
 });
