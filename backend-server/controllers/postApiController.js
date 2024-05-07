@@ -18,6 +18,7 @@ const methods = {
     },
     async showPost(req, res) {
         const postNo = Number(req.params.no);
+        await postModel.increaseHit(postNo);
         const post = await postModel.getPostByNo(postNo);
 
         if (post) {
