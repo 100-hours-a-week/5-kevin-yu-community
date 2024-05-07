@@ -76,11 +76,26 @@ const deleteComment = async (postNo, commentNo) => {
     await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
 }
 
+const changeNickname = async (prevNickname, newNickname) => {
+    const json = await getCommentJson();
+    // Object.keys -> 객체의 모든 속성을 배열로 반환(keySet)
+    Object.keys(json).forEach(postNo => {
+        json[postNo].comments.forEach(comment => {
+            if (comment.writer === prevNickname) {
+                comment.writer = newNickname;
+            }
+        });
+    });
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+};
+
 export default {
     findCommentsByPostNo,
     makeCommentObject,
     deleteCommentObject,
     saveComment,
     editComment,
-    deleteComment
+    deleteComment,
+    changeNickname,
 };

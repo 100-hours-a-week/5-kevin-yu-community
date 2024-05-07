@@ -8,7 +8,6 @@ import timeUtils from '../utils/dataUtils.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
 const BOARD_JSON = path.join(__dirname, 'json/board.json');
-const COMMENT_JSON = path.join(__dirname, 'json/comment.json');
 
 const getBoardJson = async () => {
     const file = await fs.promises.readFile(BOARD_JSON, 'utf8');
@@ -84,10 +83,22 @@ const deletePost = async (postNo) => {
     return prevImage;
 };
 
+const changeNickname = async (prevNickname, newNickname) => {
+    const board = await getBoard();
+    board.forEach(post => {
+        if (post.writer === prevNickname) {
+            post.writer = newNickname;
+        }
+    });
+
+    await fs.promises.writeFile(BOARD_JSON, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
+};
+
 export default {
     getBoard,
     getPostByNo,
     addPost,
     editPost,
     deletePost,
+    changeNickname,
 };

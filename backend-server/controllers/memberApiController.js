@@ -1,5 +1,7 @@
 import memberModel from "../models/memberModel.js";
 import req from "express/lib/request.js";
+import postModel from "../models/postModel.js";
+import commentModel from "../models/commentModel.js";
 
 const methods = {
     async loginCheck(req, res) {
@@ -63,7 +65,10 @@ const methods = {
         const userInput = req.body;
 
         try {
-            await memberModel.editMember(memberId, userInput);
+            const prevNickname = await memberModel.editMember(memberId, userInput);
+            const newNickname = userInput.nickname;
+            await postModel.changeNickname(prevNickname, newNickname);
+            await commentModel.changeNickname(prevNickname, newNickname)
             res.status(200).json({message: '회원정보 수정이 성공적으로 완료되었습니다.'});
         } catch (error) {
             res.status(500).json({message: '회원정보 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
@@ -87,7 +92,7 @@ const methods = {
         const userInput = req.body;
 
         try {
-            const result = await memberModel.editMember(memberId, userInput);
+            const result = await memberModel.editPassword(memberId, userInput);
             if (!result) {
                 res.status(409).json({message: '기존 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다.'});
                 return;
