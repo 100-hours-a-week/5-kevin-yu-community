@@ -66,11 +66,15 @@ const methods = {
         const userInput = req.body;
 
         try {
-            const prevNickname = await memberModel.editMember(memberId, userInput);
+            const prevInfo = await memberModel.editMember(memberId, userInput);
             const newNickname = userInput.nickname;
-            await postModel.changeNickname(prevNickname, newNickname);
-            await commentModel.changeNickname(prevNickname, newNickname)
-            res.status(200).json({message: '회원정보 수정이 성공적으로 완료되었습니다.'});
+            await postModel.changeNickname(prevInfo.prevNickname, newNickname);
+            await commentModel.changeNickname(prevInfo.prevNickname, newNickname);
+
+            res.status(200).json({
+                prevImage: prevInfo.prevImage,
+                message: '회원정보 수정이 성공적으로 완료되었습니다.'
+            });
         } catch (error) {
             res.status(500).json({message: '회원정보 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
         }

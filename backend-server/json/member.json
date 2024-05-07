@@ -1,5 +1,5 @@
 {
-  "sequence": 6,
+  "sequence": 7,
   "members": [
     {
       "id": 0,
@@ -42,6 +42,13 @@
       "password": "asdASD123!",
       "nickname": "리트리버",
       "image": "1619363100000_dog.jpg"
+    },
+    {
+      "id": 6,
+      "email": "asd@naver.com",
+      "password": "asdASD123!",
+      "nickname": "보리차",
+      "image": "1715075242189_cat.jpg"
     }
   ]
 }

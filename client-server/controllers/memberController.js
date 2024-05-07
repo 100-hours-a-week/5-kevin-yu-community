@@ -82,6 +82,9 @@ const methods = {
 
         const json = await response.json();
         if (response.ok) {
+            if (json.prevImage !== '') {
+                imageUtils.deleteImage('members', json.prevImage);
+            }
             res.status(200).json(json.message);
         } else {
             res.status(500).json(json.message);
