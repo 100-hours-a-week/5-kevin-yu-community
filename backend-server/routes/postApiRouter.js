@@ -14,6 +14,12 @@ router.get('/:no/comments', postApiController.showComments);
 // 댓글 등록
 router.post('/:no/comments', postApiController.addComment);
 
+// 댓글 수정
+router.patch('/:postNo/comments/:commentNo', postApiController.editComment);
+
+// 댓글 삭제
+router.delete('/:postNo/comments/:commentNo', postApiController.deleteComment);
+
 // 게시글 데이터 조회
 router.get('/:no', postApiController.showPost);
 

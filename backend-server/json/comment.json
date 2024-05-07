@@ -150,15 +150,20 @@
     ]
   },
   "7": {
-    "sequence": 2,
+    "sequence": 3,
     "comments": [
       {
         "no": 1,
         "content": "반가워요~",
         "writer": "리트리버",
         "regDt": "2024-05-04 17:02:09"
+      },
+      {
+        "no": 2,
+        "content": "안녕하세요~!",
+        "writer": "재무책임자",
+        "regDt": "2024-05-07 11:45:14"
       }
     ]
-  },
-  "sequence": 8
+  }
 }

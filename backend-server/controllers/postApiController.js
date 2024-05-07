@@ -1,6 +1,7 @@
 import postModel from "../models/postModel.js";
 import memberModel from "../models/memberModel.js";
 import commentModel from "../models/commentModel.js";
+import req from "express/lib/request.js";
 
 const methods = {
     async addPost(req, res) {
@@ -75,6 +76,28 @@ const methods = {
         }
         res.status(200).json({message: '댓글이 성공적으로 등록되었습니다.'});
     },
+    async editComment(req, res) {
+        const postNo = Number(req.params.postNo);
+        const commentNo = Number(req.params.commentNo);
+
+        try {
+            await commentModel.editComment(postNo, commentNo, req.body.content);
+        } catch (error) {
+            res.status(500).json({message: '댓글 수정에 실패했습니다. 잠시 후 다시 시도해주세요.'});
+        }
+        res.status(200).json({message: '댓글을 성공적으로 수정하였습니다.'});
+    },
+    async deleteComment(req, res) {
+        const postNo = Number(req.params.postNo);
+        const commentNo = Number(req.params.commentNo);
+
+        try {
+            await commentModel.deleteComment(postNo, commentNo);
+        } catch (error) {
+            res.status(500).json({message: '댓글 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.'});
+        }
+        res.status(200).json({message: '댓글을 성공적으로 삭제하였습니다.'});
+    }
 };
 
 export default methods;
