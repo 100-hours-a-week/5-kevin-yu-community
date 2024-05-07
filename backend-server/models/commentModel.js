@@ -50,6 +50,7 @@ const saveComment = async (postNo, member, content) => {
     findComments.comments.push(newComment);
 
     await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+    return findComments.comments.length;
 };
 
 const editComment = async (postNo, commentNo, newContent) => {
@@ -74,6 +75,7 @@ const deleteComment = async (postNo, commentNo) => {
     }
 
     await fs.promises.writeFile(JSON_PATH, JSON.stringify(json, null, 2));
+    return findComments.comments.length;
 }
 
 const changeNickname = async (prevNickname, newNickname) => {
