@@ -20,7 +20,7 @@ function convertCount(count) {
 }
 
 // 게시글 요소를 생성하는 코드가 너무 길어서 가독성을 위해 분리
-function makePostElement(data, post) {
+function makePostElement(data, post, imageMap) {
     // 가장 바깥쪽을 감싸는 <article> 태그 생성
     const article = document.createElement('article');
     // 조회수와 댓글 개수 변환
@@ -36,33 +36,44 @@ function makePostElement(data, post) {
                 <div class="count">
                     <div>좋아요 ${post.like}</div>
                     <div>댓글 ${comment}</div>
-                    <div>조회수 ${hit}</div>
+                    <div>조회수 ${hit}</div>s
                 </div>
                 <div class="date">${post.regDt}</div>
             </div>
         </section>
         <hr class="post-horizontal" />
         <section class="writer">
-            <div class="image"></div>
+            <img class="image" src="../images/members/${imageMap.get(post.writer)}" alt="">
             <div class="nickname">${post.writer}</div>
         </section>`;
     // 생성된 요소를 반환
     return article;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('http://localhost:4000/json/board')
-        .then(response => response.json())
-        .then(data => {
-            const postList = document.querySelector('.post-list');
-            data.forEach(post => {
-                // JSON에서 가져온 데이터로 새로운 요소를 생성하고
-                let newPostElement = makePostElement(data, post);
-                // 기존의 요소 밑에 추가함
-                postList.appendChild(newPostElement);
-            });
-        })
-        .catch(error => console.log(`Error: ${error}`));
+// 회원들의 닉네임과 프로필 이미지를 Map 형태로 반환
+async function getImageMap() {
+    const memberResponse = await fetch('http://localhost:4000/json/members/images');
+    const members = await memberResponse.json();
+
+    return members.profileImages.reduce((memberMap, member) => {
+        memberMap.set(member.nickname, member.image);
+        return memberMap;
+    }, new Map());
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const boardResponse = await fetch('http://localhost:4000/json/board')
+    const board = await boardResponse.json();
+
+    const imageMap = await getImageMap();
+
+    const postList = document.querySelector('.post-list');
+    board.forEach(post => {
+        // JSON에서 가져온 데이터로 새로운 요소를 생성하고
+        let newPostElement = makePostElement(board, post, imageMap);
+        // 기존의 요소 밑에 추가함
+        postList.appendChild(newPostElement);
+    });
 });
 
 // 이벤트 위임을 통해 특정 게시글로 이동

@@ -27,6 +27,14 @@ const getMemberById = async (memberId) => {
     return members.find(member => member.id === memberId);
 };
 
+const getProfileImage = async () => {
+    const members = await getMembers();
+    return members.map(member => ({
+        nickname: member.nickname,
+        image: member.image
+    }));
+};
+
 const saveMember = async (userInput) => {
     const members = await getMembers();
     const sequence = await getSequence();
@@ -96,6 +104,7 @@ const deleteMember = async (memberId) => {
 export default {
     getMembers,
     getMemberById,
+    getProfileImage,
     saveMember,
     editMember,
     editPassword,
