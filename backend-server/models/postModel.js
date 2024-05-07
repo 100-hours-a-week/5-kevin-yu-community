@@ -33,7 +33,16 @@ const getPostByNo = async (postNo) => {
 const increaseHit = async (postNo) => {
     const post = await getPostByNo(postNo);
     post.hit += 1;
-    await fs.promises.writeFile(JSON_FILE, JSON.stringify({sequence: await getSequence(), posts: board}));
+    await fs.promises.writeFile(JSON_FILE, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
+};
+
+const updateCommentCount = async (postNo, commentCount) => {
+    const post = await getPostByNo(postNo);
+
+    console.log(commentCount);
+
+    post.comment = commentCount;
+    await fs.promises.writeFile(JSON_FILE, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
 };
 
 const addPost = async (userInput, nickname) => {
@@ -104,6 +113,7 @@ export default {
     getBoard,
     getPostByNo,
     increaseHit,
+    updateCommentCount,
     addPost,
     editPost,
     deletePost,

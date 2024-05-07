@@ -72,7 +72,8 @@ const methods = {
         const comment = req.body.comment;
 
         try {
-            await commentModel.saveComment(postNo, member, comment);
+            const commentCount = await commentModel.saveComment(postNo, member, comment);
+            await postModel.updateCommentCount(postNo, commentCount);
             res.status(200).json({message: '댓글이 성공적으로 등록되었습니다.'});
         } catch (error) {
             res.status(500).json({message: '댓글 등록에 실패하였습니다. 잠시 후 다시 시도해주세요.'});
@@ -94,7 +95,8 @@ const methods = {
         const commentNo = Number(req.params.commentNo);
 
         try {
-            await commentModel.deleteComment(postNo, commentNo);
+            const commentCount = await commentModel.deleteComment(postNo, commentNo);
+            await postModel.updateCommentCount(postNo, commentCount);
             res.status(200).json({message: '댓글을 성공적으로 삭제하였습니다.'});
         } catch (error) {
             res.status(500).json({message: '댓글 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.'});
