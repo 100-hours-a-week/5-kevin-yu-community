@@ -49,14 +49,24 @@ const editMember = async (memberId, userInput) => {
 
     const nickname = userInput.nickname;
     const image = userInput.image;
-    const password = userInput.password;
 
+    const prevNickname = member.nickname; // 변경하기 전 닉네임
     if (nickname !== '' && nickname !== undefined) {
         member.nickname = nickname;
     }
     if (image !== '' && image !== undefined) {
         member.image = image;
     }
+
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members: members}, null, 2));
+    return prevNickname;
+};
+
+const editPassword = async (memberId, userInput) => {
+    const members = await getMembers();
+    const member = members.find(member => member.id === memberId);
+
+    const password = userInput.password;
     if (password !== '' && password !== undefined) {
         if (member.password === password) {
             return false;
@@ -88,5 +98,6 @@ export default {
     getMemberById,
     saveMember,
     editMember,
-    deleteMember
+    editPassword,
+    deleteMember,
 };

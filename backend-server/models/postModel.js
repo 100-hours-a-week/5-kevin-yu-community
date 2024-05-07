@@ -7,10 +7,10 @@ import timeUtils from '../utils/dataUtils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
-const JSON_PATH = path.join(__dirname, "json/board.json");
+const BOARD_JSON = path.join(__dirname, 'json/board.json');
 
 const getBoardJson = async () => {
-    const file = await fs.promises.readFile(JSON_PATH, 'utf8');
+    const file = await fs.promises.readFile(BOARD_JSON, 'utf8');
     return JSON.parse(file);
 };
 
@@ -48,7 +48,8 @@ const addPost = async (userInput, nickname) => {
     };
     board.unshift(newPost);
 
-    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, posts : board}, null, 2));
+    await fs.promises.writeFile(BOARD_JSON, JSON.stringify({sequence: sequence + 1, posts: board}, null, 2));
+    return sequence;
 };
 
 const editPost = async (postNo, userInput) => {
@@ -62,7 +63,7 @@ const editPost = async (postNo, userInput) => {
     post.regDt = timeUtils.getCurrentTime();
 
     const json = JSON.stringify({sequence: await getSequence(), posts: board}, null, 2);
-    await fs.promises.writeFile(JSON_PATH, json);
+    await fs.promises.writeFile(BOARD_JSON, json);
 
     return prevImage; // 이전 이미지를 삭제하기 위해 이미지명 반환
 };
@@ -78,8 +79,19 @@ const deletePost = async (postNo) => {
         throw new Error('게시글 정보를 찾을 수 없습니다.');
     }
 
-    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
+    await fs.promises.writeFile(BOARD_JSON, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
     return prevImage;
+};
+
+const changeNickname = async (prevNickname, newNickname) => {
+    const board = await getBoard();
+    board.forEach(post => {
+        if (post.writer === prevNickname) {
+            post.writer = newNickname;
+        }
+    });
+
+    await fs.promises.writeFile(BOARD_JSON, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
 };
 
 export default {
@@ -88,4 +100,5 @@ export default {
     addPost,
     editPost,
     deletePost,
+    changeNickname,
 };
