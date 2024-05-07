@@ -41,7 +41,6 @@ function insertText(post) {
     title.textContent = post.title;
     // 프로필 사진
     const profile = document.querySelector('.writer .image');
-    console.log(profile);
     getImageMap().then(map => {
         profile.src = `../images/members/${map.get(post.writer)}`;
     });
@@ -74,7 +73,7 @@ function insertText(post) {
 // 댓글 리스트 생성
 const commentList = document.querySelector('.comment-list');
 
-async function makeCommentList(postNo) {
+async function makeCommentList(postNo, nickname) {
     const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments`);
     const json = await response.json();
     const comments = json.commentList.comments;
@@ -103,6 +102,11 @@ async function makeCommentList(postNo) {
                 <button class="delete-comment regular">삭제</button>
             </div>
         `;
+        // 본인이 아니면 댓글 수정/삭제 못하게 막기
+        if (comment.writer !== nickname) {
+            console.log(document.querySelector('.buttons'));
+            commentElement.querySelector('.buttons').style.display = 'none';
+        }
         // 댓글 요소 생성 후 댓글 리스트 요소에 추가
         commentList.appendChild(commentElement);
     });
@@ -112,9 +116,9 @@ async function makeCommentList(postNo) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', async () => {
-    const nickname = await fetch(`http://localhost:4000/json/members?id=${id}`)
-        .then(response => response.json())
-        .then(json => json.nickname);
+    const response = await fetch(`http://localhost:4000/json/members?id=${id}`);
+    const json = await response.json();
+    const nickname = json.nickname;
 
     fetch(`http://localhost:4000/json/posts/${postNo}?id=${id}`)
         .then(response => response.json())
@@ -127,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.querySelector('.info .buttons').style.visibility = 'hidden';
             }
 
-            const commentList = makeCommentList(post.no);
+            const commentList = makeCommentList(post.no, nickname);
             commentSection.appendChild(commentList);
         }) // then
         .catch(error => console.log(`Error: ${error}`));

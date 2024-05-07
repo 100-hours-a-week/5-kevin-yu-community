@@ -36,7 +36,7 @@ function makePostElement(data, post, imageMap) {
                 <div class="count">
                     <div>좋아요 ${post.like}</div>
                     <div>댓글 ${comment}</div>
-                    <div>조회수 ${hit}</div>s
+                    <div>조회수 ${hit}</div>
                 </div>
                 <div class="date">${post.regDt}</div>
             </div>
