@@ -18,5 +18,7 @@ router.put('/', memberController.editMember);
 router.delete('/', memberController.deleteMember);
 // 비밀번호 변경
 router.patch('/password', memberController.editPassword);
+// 회원들의 프로필 이미지 조회
+router.get('/images', memberController.getProfileImages);
 
 export default router;

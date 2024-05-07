@@ -23,11 +23,28 @@ function convertCount(count) {
     }
 }
 
+// 회원들의 닉네임과 프로필 이미지를 Map 형태로 반환
+async function getImageMap() {
+    const memberResponse = await fetch('http://localhost:4000/json/members/images');
+    const members = await memberResponse.json();
+
+    return members.profileImages.reduce((memberMap, member) => {
+        memberMap.set(member.nickname, member.image);
+        return memberMap;
+    }, new Map());
+}
+
 // 게시글 템플릿에 JSON 데이터 삽입
 function insertText(post) {
     // 제목
     const title = document.querySelector('.title > h2');
     title.textContent = post.title;
+    // 프로필 사진
+    const profile = document.querySelector('.writer .image');
+    console.log(profile);
+    getImageMap().then(map => {
+        profile.src = `../images/members/${map.get(post.writer)}`;
+    });
     // 작성자
     const nickname = document.querySelector('.nickname');
     nickname.textContent = post.writer;
@@ -62,6 +79,8 @@ async function makeCommentList(postNo) {
     const json = await response.json();
     const comments = json.commentList.comments;
 
+    const imageMap = await getImageMap();
+
     comments.forEach(comment => {
         // 댓글 요소 생성
         const commentElement = document.createElement('div');
@@ -69,9 +88,7 @@ async function makeCommentList(postNo) {
 
         commentElement.innerHTML = `
             <div>
-                <div class="image">
-                    <img src="" alt="" />
-                </div>
+                <img class="image" src="../images/members/${imageMap.get(comment.writer)}" alt="" />
             </div>
             <div class="center">
                 <div class="comment-no" style="display:none">${comment.no}</div>
