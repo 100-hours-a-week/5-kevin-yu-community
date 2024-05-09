@@ -1,8 +1,8 @@
-import memberModel from "../models/memberModel.js";
-import req from "express/lib/request.js";
-import postModel from "../models/postModel.js";
-import commentModel from "../models/commentModel.js";
-import res from "express/lib/response.js";
+const memberModel = require("../models/memberModel.js");
+const req = require("express/lib/request.js");
+const postModel = require("../models/postModel.js");
+const commentModel = require("../models/commentModel.js");
+const res = require("express/lib/response.js");
 
 const methods = {
     async loginCheck(req, res) {
@@ -117,4 +117,4 @@ const methods = {
     },
 };
 
-export default methods;
+module.exports = methods;

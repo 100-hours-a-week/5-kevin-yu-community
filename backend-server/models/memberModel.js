@@ -1,11 +1,7 @@
-import path, {dirname} from 'path';
-import {fileURLToPath} from 'url';
-import fs from 'fs';
-import req from "express/lib/request.js";
+const path = require('path');
+const fs = require('fs');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve(dirname(__filename), '..');
-const JSON_PATH = path.join(__dirname, "json/member.json");
+const JSON_PATH = path.join(__dirname, "..", "json/member.json");
 
 const getMemberJson = async () => {
     const file = await fs.promises.readFile(JSON_PATH, 'utf8');
@@ -23,7 +19,7 @@ const getMembers = async () => {
 };
 
 const getMemberById = async (memberId) => {
-   const members = await getMembers();
+    const members = await getMembers();
     return members.find(member => member.id === memberId);
 };
 
@@ -48,7 +44,7 @@ const saveMember = async (userInput) => {
     };
     members.push(newMember);
 
-    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, members : members}, null, 2));
+    await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, members: members}, null, 2));
 };
 
 const editMember = async (memberId, userInput) => {
@@ -77,7 +73,7 @@ const editPassword = async (memberId, userInput) => {
     const members = await getMembers();
     const member = members.find(member => member.id === memberId);
 
-    const password = userInput.password;
+    const password = userInput.timeout.password;
     if (password !== '' && password !== undefined) {
         if (member.password === password) {
             return false;
@@ -104,7 +100,7 @@ const deleteMember = async (memberId) => {
     return prevImage;
 };
 
-export default {
+module.exports = {
     getMembers,
     getMemberById,
     getProfileImage,

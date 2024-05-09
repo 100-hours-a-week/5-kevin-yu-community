@@ -1,13 +1,12 @@
-import postModel from "../models/postModel.js";
-import memberModel from "../models/memberModel.js";
-import commentModel from "../models/commentModel.js";
+const postModel = require("../models/postModel.js");
+const memberModel = require("../models/memberModel.js");
+const commentModel = require("../models/commentModel.js");
 
 const methods = {
     async addPost(req, res) {
         const userInput = req.body;
         const memberId = Number(req.query.id);
         const member = await memberModel.getMemberById(memberId);
-
         try {
             const postNo = await postModel.addPost(userInput, member.nickname);
             await commentModel.makeCommentObject(postNo);
@@ -20,7 +19,6 @@ const methods = {
         const postNo = Number(req.params.no);
         await postModel.increaseHit(postNo);
         const post = await postModel.getPostByNo(postNo);
-
         if (post) {
             res.status(200).json(post);
         } else {
@@ -30,7 +28,6 @@ const methods = {
     async editPost(req, res) {
         const postNo = Number(req.params.no);
         const userInput = req.body;
-
         let prevImage;
         try {
             prevImage = await postModel.editPost(postNo, userInput);
@@ -41,7 +38,6 @@ const methods = {
         } catch (error) {
             res.status(500).json({message: '예상치 못한 서버 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.'});
         }
-
     },
     async deletePost(req, res) {
         const postNo = Number(req.params.no);
@@ -58,7 +54,6 @@ const methods = {
     },
     async showComments(req, res) {
         const postNo = req.params.no;
-
         try {
             const commentList = await commentModel.findCommentsByPostNo(postNo);
             res.status(200).json({commentList});
@@ -70,7 +65,6 @@ const methods = {
         const postNo = Number(req.params.no);
         const member = await memberModel.getMemberById(Number(req.query.id));
         const comment = req.body.comment;
-
         try {
             const commentCount = await commentModel.saveComment(postNo, member, comment);
             await postModel.updateCommentCount(postNo, commentCount);
@@ -82,7 +76,6 @@ const methods = {
     async editComment(req, res) {
         const postNo = Number(req.params.postNo);
         const commentNo = Number(req.params.commentNo);
-
         try {
             await commentModel.editComment(postNo, commentNo, req.body.content);
             res.status(200).json({message: '댓글을 성공적으로 수정하였습니다.'});
@@ -93,7 +86,6 @@ const methods = {
     async deleteComment(req, res) {
         const postNo = Number(req.params.postNo);
         const commentNo = Number(req.params.commentNo);
-
         try {
             const commentCount = await commentModel.deleteComment(postNo, commentNo);
             await postModel.updateCommentCount(postNo, commentCount);
@@ -104,4 +96,4 @@ const methods = {
     }
 };
 
-export default methods;
+module.exports = methods;
