@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 
-import postApiController from "../controllers/postApiController.js";
+const postApiController = require("../controllers/postApiController.js");
 
 const router = express.Router();
 
@@ -29,4 +29,4 @@ router.put('/:no', postApiController.editPost);
 // 게시글 삭제
 router.delete('/:no', postApiController.deletePost);
 
-export default router;
+module.exports = router;

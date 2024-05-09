@@ -1,9 +1,9 @@
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
 
-import memberRouter from './routes/memberApiRouter.js';
-import boardRouter from './routes/boardApiRouter.js';
-import postRouter from './routes/postApiRouter.js';
+const memberRouter = require('./routes/memberApiRouter.js');
+const boardRouter = require('./routes/boardApiRouter.js');
+const postRouter = require('./routes/postApiRouter.js');
 
 const server = express();
 const port = 4000;

@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 
-import memberController from "../controllers/memberApiController.js";
+const memberController = require("../controllers/memberApiController.js");
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ router.patch('/password', memberController.editPassword);
 // 회원들의 프로필 이미지 조회
 router.get('/images', memberController.getProfileImages);
 
-export default router;
+module.exports = router;

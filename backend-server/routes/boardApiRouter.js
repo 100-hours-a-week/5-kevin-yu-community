@@ -1,9 +1,9 @@
-import express from 'express';
+const express = require('express');
 
-import boardApiController from "../controllers/boardApiController.js";
+const boardApiController = require("../controllers/boardApiController.js");
 
 const router = express.Router();
 
 router.get('/', boardApiController.showBoard);
 
-export default router;
+module.exports = router;

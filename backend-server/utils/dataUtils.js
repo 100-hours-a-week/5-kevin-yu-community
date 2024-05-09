@@ -12,6 +12,6 @@ const getCurrentTime = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-export default {
+module.exports = {
     getCurrentTime
 };

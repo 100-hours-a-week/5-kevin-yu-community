@@ -1,4 +1,4 @@
-import postModel from "../models/postModel.js";
+const postModel = require("../models/postModel.js");
 
 const methods = {
     async showBoard(req, res) {
@@ -12,4 +12,4 @@ const methods = {
     }
 }
 
-export default methods;
+module.exports = methods;
