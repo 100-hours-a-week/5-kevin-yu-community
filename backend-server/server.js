@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 
@@ -6,12 +8,12 @@ const boardRouter = require('./routes/boardApiRouter.js');
 const postRouter = require('./routes/postApiRouter.js');
 
 const server = express();
-const port = 4000;
+const port = process.env.PORT;
 
 server.use(express.urlencoded({extended: false}));
 server.use(express.json());
 server.use(cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN,
     methods: ['GET', 'POST', 'PATCH', 'DELETE']
 }));
 

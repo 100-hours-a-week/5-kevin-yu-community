@@ -1,3 +1,6 @@
+import { config } from 'dotenv';
+config();
+
 import express from 'express';
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -7,7 +10,7 @@ import memberRouter from './routes/memberRouter.js';
 import postRouter from './routes/postRouter.js';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
