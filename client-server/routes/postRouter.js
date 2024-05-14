@@ -10,7 +10,7 @@ const {uploadPosts} = imageUtils;
 router.get('/add-form', postController.showAddForm);
 
 // 게시글 등록
-router.post('/', uploadPosts.single('file'), postController.addPost);
+router.post('/', uploadPosts.single('file'), postController.savePostImage);
 
 // 게시글 조회
 router.get('/:no', postController.showPost);

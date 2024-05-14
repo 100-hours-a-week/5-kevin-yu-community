@@ -2,13 +2,40 @@ const postModel = require("../models/postModel.js");
 const memberModel = require("../models/memberModel.js");
 const commentModel = require("../models/commentModel.js");
 
+const FormData = require('form-data');
+const axios= require('axios');
+
+async function sendFileToClientServer(fileBuffer, fileName, mimeType) {
+    const formData = new FormData();
+
+    formData.append('file', fileBuffer, {filename: fileName, contentType: mimeType});
+
+    const response = await axios.post('http://localhost:3000/posts', formData, {
+        headers: formData.getHeaders(),
+    });
+
+    return response.data;
+}
+
 const methods = {
     async addPost(req, res) {
         const userInput = req.body;
-        const memberId = Number(req.query.id);
-        const member = await memberModel.getMemberById(memberId);
+        const file = req.file;
+        const member = await memberModel.getMemberById(req.session.member.id);
+
+        let imageName = file ? file.originalname : '';
         try {
-            const postNo = await postModel.addPost(userInput, member.nickname);
+            // 만약 사용자가 이미지를 업로드했다면, 클라이언트 서버에 저장해줄 것을 요청
+            if (imageName !== '') {
+                const data = await sendFileToClientServer(file.buffer, imageName, file.mimeType);
+                imageName = data.imageName;
+
+                if (!imageName) {
+                    throw new Error(); // 바로 catch문으로 이동시키려는 의도
+                }
+            }
+
+            const postNo = await postModel.addPost(userInput, imageName, member.nickname);
             await commentModel.makeCommentObject(postNo);
             res.status(200).json({message: '성공적으로 등록하였습니다.'});
         } catch (error) {
@@ -63,7 +90,7 @@ const methods = {
     },
     async addComment(req, res) {
         const postNo = Number(req.params.no);
-        const member = await memberModel.getMemberById(Number(req.query.id));
+        const member = await memberModel.getMemberById(req.session.member.id);
         const comment = req.body.comment;
         try {
             const commentCount = await commentModel.saveComment(postNo, member, comment);

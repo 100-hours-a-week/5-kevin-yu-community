@@ -6,15 +6,23 @@ const no = path.split('/')[2];
 const id = new URLSearchParams(window.location.search).get('id');
 
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = `/posts/${no}?id=${id}`;
+    window.location.href = `/posts/${no}`;
 });
 
 // 게시글의 데이터를 백엔드 서버에 요청
 const title = document.querySelector('#title');
 const content = document.querySelector('#content');
 document.addEventListener('DOMContentLoaded', () => {
-    fetch(`http://localhost:4000/json/posts/${no}`)
-        .then(response => response.json())
+    fetch(`http://localhost:4000/json/posts/${no}`, {
+        credentials: 'include',
+    })
+        .then(response => {
+            if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
+                window.location.href = '/members/login';
+            }
+
+            return response.json()
+        })
         .then(post => {
             title.value = post.title;
             content.value = post.content;
@@ -59,7 +67,7 @@ document.querySelector('.submit button').addEventListener('click', (e) => {
             .then(response => {
                 if (response.ok) {
                     alert('게시글을 성공적으로 수정하였습니다.');
-                    window.location.href = `/posts/${no}?id=${id}`
+                    window.location.href = `/posts/${no}`
                 } else {
                     alert('게시글 수정에 실패하였습니다. 잠시 후 다시 시도해주세요.');
                 }

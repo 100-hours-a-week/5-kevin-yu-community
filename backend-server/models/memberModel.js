@@ -31,6 +31,12 @@ const getProfileImage = async () => {
     }));
 };
 
+const findMemberByUserInfo = async (userInput) => {
+    const members = await getMembers();
+    return members.find(member =>
+        member.email === userInput.email && member.password === userInput.password);
+}
+
 const saveMember = async (userInput) => {
     const members = await getMembers();
     const sequence = await getSequence();
@@ -47,33 +53,28 @@ const saveMember = async (userInput) => {
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: sequence + 1, members: members}, null, 2));
 };
 
-const editMember = async (memberId, userInput) => {
+const editMember = async (memberId, nickname, image) => {
     const members = await getMembers();
     const member = members.find(member => member.id === memberId);
-
-    const nickname = userInput.nickname;
-    const image = userInput.image;
 
     const prevNickname = member.nickname; // 변경하기 전 닉네임
     if (nickname !== '' && nickname !== undefined) {
         member.nickname = nickname;
     }
 
-    let prevImage = '';
     if (image !== '' && image !== undefined) {
-        prevImage = member.image;
         member.image = image;
     }
 
     await fs.promises.writeFile(JSON_PATH, JSON.stringify({sequence: await getSequence(), members: members}, null, 2));
-    return {prevNickname, prevImage};
+    return prevNickname;
 };
 
 const editPassword = async (memberId, userInput) => {
     const members = await getMembers();
     const member = members.find(member => member.id === memberId);
 
-    const password = userInput.timeout.password;
+    const password = userInput.password;
     if (password !== '' && password !== undefined) {
         if (member.password === password) {
             return false;
@@ -104,6 +105,7 @@ module.exports = {
     getMembers,
     getMemberById,
     getProfileImage,
+    findMemberByUserInfo,
     saveMember,
     editMember,
     editPassword,

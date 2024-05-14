@@ -64,19 +64,19 @@ loginButton.addEventListener('click', () => {
         const password = passwordInput.value;
         // 클라이언트 서버에 로그인 정보를 보냄
         // 클라이언트 서버는 JSON API 서버에서 JSON을 받아서 비교 후 로그인 처리
-        fetch('/members/login', {
+        fetch('http://localhost:4000/json/members/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({email, password})
+            body: JSON.stringify({email, password}),
+            credentials: 'include',
         })
             .then(response => {
                 const helper = document.querySelector('.password-helper');
 
                 if (response.status === 200) {
-                    response.json()
-                        .then(data => window.location.href = `/board?id=${data.id}`)
+                    window.location.href = `/board`;
                 } else if (response.status === 400) {
                     showHelperText(helper, '*잘못된 요청 정보입니다.');
                 } else if (response.status === 401) {

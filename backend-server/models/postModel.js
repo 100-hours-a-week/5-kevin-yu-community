@@ -42,7 +42,7 @@ const updateCommentCount = async (postNo, commentCount) => {
     await fs.promises.writeFile(JSON_FILE, JSON.stringify({sequence: await getSequence(), posts: board}, null, 2));
 };
 
-const addPost = async (userInput, nickname) => {
+const addPost = async (userInput, imageName, nickname) => {
     const board = await getBoard();
     const sequence = await getSequence();
 
@@ -50,13 +50,12 @@ const addPost = async (userInput, nickname) => {
         no: sequence,
         title: userInput.title,
         content: userInput.content,
-        image: userInput.image,
+        image: imageName,
         writer: nickname,
         regDt: timeUtils.getCurrentTime(),
         like: 0,
         comment: 0,
         hit: 0,
-        comments: []
     };
     board.unshift(newPost);
 

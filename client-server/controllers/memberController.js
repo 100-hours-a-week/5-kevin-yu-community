@@ -11,22 +11,15 @@ const methods = {
     showLoginForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'login.html'));
     },
+    // Deprecated: 필요 없는 코드가 되었음
     async loginCheck(req, res) {
         try {
-            const userInput = req.body;
-            const emailRegExp = /^[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,3}$/;
-            const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/;
-            if (!(emailRegExp.test(userInput.email) && passwordRegExp.test(userInput.password))) {
-                res.sendStatus(400);
-                return;
-            }
-
             const response = await fetch('http://localhost:4000/json/members/login', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(userInput)
+                body: JSON.stringify(req.body)
             });
 
             const result = await response.json();
@@ -68,39 +61,20 @@ const methods = {
     showEditInfoForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'edit-member.html'));
     },
-    async editMemberInfo(req, res) {
-        const response = await fetch(`http://localhost:4000/json/members?id=${req.query.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                nickname: req.body.nickname,
-                image: req.file !== undefined ? req.file.filename : ""
-            })
-        });
-
-        const json = await response.json();
-        if (response.ok) {
-            if (json.prevImage !== '') {
-                imageUtils.deleteImage('members', json.prevImage);
-            }
-            res.status(200).json(json.message);
-        } else {
-            res.status(500).json(json.message);
+    async editMemberImage(req, res) {
+        try {
+            imageUtils.deleteImage('members', req.body.prevImageName);
+            res.status(200).json({imageName: req.file.filename});
+        } catch (error) {
+            res.status(500).json({message: '이미지 삭제에 실패했습니다.'});
         }
     },
     async deleteMember(req, res) {
-        const response = await fetch(`http://localhost:4000/json/members?id=${req.query.id}`, {
-            method: 'DELETE'
-        });
-
-        const json = await response.json();
-        if (response.ok) {
-            imageUtils.deleteImage('members', json.prevImage);
-            res.status(200).json({message: json.message});
-        } else {
-            res.status(500).json({message: json.message});
+        try {
+            imageUtils.deleteImage('members', req.query.image);
+            res.status(200).json({})
+        } catch (error) {
+            res.status(500).json({message: '이미지 삭제에 실패했습니다.'});
         }
     },
     showPasswordForm(req, res) {

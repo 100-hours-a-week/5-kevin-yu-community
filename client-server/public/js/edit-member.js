@@ -4,11 +4,17 @@ const nicknameInput = document.querySelector('#nickname');
 const helper = document.querySelector('.helper');
 const editButton = document.querySelector('.button');
 
-const id = new URLSearchParams(window.location.search).get('id');
-
 document.addEventListener('DOMContentLoaded', () => {
-    fetch(`http://localhost:4000/json/members?id=${id}`)
-        .then(response => response.json())
+    fetch(`http://localhost:4000/json/members`, {
+        credentials: "include",
+    })
+        .then(response => {
+            if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
+                window.location.href = '/members/login';
+            }
+
+            return response.json()
+        })
         .then(member => {
             image.src = `/images/members/${member.image}`;
             emailInput.textContent = member.email;
@@ -40,7 +46,10 @@ function changeFinishButton(state) {
 }
 
 async function checkDuplication(nickname) {
-    const response = await fetch(`http://localhost:4000/json/members/duplication?nickname=${nickname}`);
+    const response = await fetch(`http://localhost:4000/json/members/duplication?nickname=${nickname}`, {
+        credentials: 'include',
+    });
+
     return !response.ok;
 }
 
@@ -74,9 +83,10 @@ editButton.addEventListener('click', async () => {
         }
         helper.style.visibility = 'hidden';
 
-        const response = await fetch(`/members?id=${id}`, {
+        const response = await fetch(`http://localhost:4000/json/members`, {
             method: 'PUT',
-            body: formData
+            body: formData,
+            credentials: 'include',
         });
 
         if (response.ok) {
@@ -89,7 +99,7 @@ editButton.addEventListener('click', async () => {
 
 finishButton.addEventListener('click', () => {
     if (isChanged) {
-        window.location.href = `/board?id=${id}`;
+        window.location.href = `/board`;
     }
 });
 
@@ -106,8 +116,9 @@ document.querySelector('.quit').addEventListener('click', (e) => {
 });
 
 document.querySelector('.modal .confirm').addEventListener('click', async () => {
-    const response = await fetch(`/members?id=${id}`, {
-        method: 'DELETE'
+    const response = await fetch(`http://localhost:4000/json/members`, {
+        method: 'DELETE',
+        credentials: 'include',
     });
 
     const json = await response.json();
