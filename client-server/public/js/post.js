@@ -1,13 +1,11 @@
 // path variable에서 파싱한 게시글의 번호
 const path = window.location.pathname;
 const postNo = path.substring(path.lastIndexOf('/') + 1);
-// query string에서 파싱한 사용자 번호
-const id = new URLSearchParams(window.location.search).get('id');
 
 // 헤더
 // 뒤로 가기 버튼
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = `/board?id=${id}`;
+    window.location.href = `/board`;
 });
 
 // 조회수와 댓글의 개수를 변환하는 함수
@@ -104,7 +102,6 @@ async function makeCommentList(postNo, nickname) {
         `;
         // 본인이 아니면 댓글 수정/삭제 못하게 막기
         if (comment.writer !== nickname) {
-            console.log(document.querySelector('.buttons'));
             commentElement.querySelector('.buttons').style.display = 'none';
         }
         // 댓글 요소 생성 후 댓글 리스트 요소에 추가
@@ -116,14 +113,25 @@ async function makeCommentList(postNo, nickname) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', async () => {
-    const response = await fetch(`http://localhost:4000/json/members?id=${id}`);
+    const response = await fetch(`http://localhost:4000/json/members`, {
+        credentials: 'include',
+    });
     const json = await response.json();
     const nickname = json.nickname;
 
-    fetch(`http://localhost:4000/json/posts/${postNo}?id=${id}`)
-        .then(response => response.json())
+    fetch(`http://localhost:4000/json/posts/${postNo}`, {
+        credentials: 'include',
+    })
+        .then(response => {
+            if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
+                window.location.href = '/members/login';
+            }
+
+            return response.json()
+        })
         .then(post => {
             const commentSection = document.querySelector('.comment');
+            console.log(post);
             insertText(post);
 
             // 만약 작성자가 아니면 수정/삭제 버튼 숨김
@@ -160,7 +168,7 @@ function showModal(text) {
 // 게시글 수정/삭제 버튼 이벤트 등록
 document.querySelector('.post').addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-post')) {
-        window.location.href = `/posts/${postNo}/edit-form?id=${id}`;
+        window.location.href = `/posts/${postNo}/edit-form`;
     } else if (e.target.classList.contains('delete-post')) {
         showModal('게시글을 삭제하시겠습니까?');
     }
@@ -172,12 +180,13 @@ document.querySelector('.comment-button').addEventListener('click', async () => 
 
     if (comment.trim() === '') return;
 
-    const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments?id=${id}`, {
+    const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({comment})
+        body: JSON.stringify({comment}),
+        credentials: 'include',
     });
 
     const json = await response.json();
@@ -262,7 +271,7 @@ document.querySelector('.modal .confirm').addEventListener('click', () => {
                     window.location.reload();
                 } else {
                     alert(`게시글을 성공적으로 삭제하였습니다.`);
-                    window.location.href = `/board?id=${id}`;
+                    window.location.href = `/board`;
                 }
             }
         });

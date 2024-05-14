@@ -3,7 +3,7 @@ const id = urlParams.get('id');
 // 헤더
 // 뒤로 가기 버튼
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = `/board?id=${id}`;
+    window.location.href = `/board`;
 });
 
 //본문
@@ -27,8 +27,6 @@ function changeButtonState() {
         helper.style.visibility = 'hidden';
     }
 }
-
-
 
 // 사용자가 제목을 입력했을 때
 titleInput.addEventListener('change', () => {
@@ -59,13 +57,13 @@ submitButton.addEventListener('click', (e) => {
         formData.append('title', titleInput.value);
         formData.append('content', contentInput.value);
 
-        // JSON API로 사용자가 입력한 데이터를 보냄
-        fetch(`/posts?id=${id}`, {
+        fetch(`http://localhost:4000/json/posts`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include',
         }).then(response => {
             if (response.ok) {
-                window.location.href = `/board?id=${id}`;
+                window.location.href = `/board`;
             }
         });
     }

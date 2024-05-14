@@ -12,7 +12,7 @@ document.querySelector('.header-image img').addEventListener('click', () => {
 
 // 메뉴 클릭 시 해당하는 페이지로 이동
 document.querySelectorAll('.menu div').forEach(div => {
-    div.addEventListener('click', () => {
+    div.addEventListener('click', async () => {
         let path;
         switch (div.textContent) {
             case '회원정보수정':
@@ -22,7 +22,15 @@ document.querySelectorAll('.menu div').forEach(div => {
                 path = '/members/password';
                 break;
             case '로그아웃':
-                path = '/members/login';
+                const response = await fetch('http://localhost:4000/json/members/logout', {
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    path = '/members/login';
+                } else {
+                    alert(data.message);
+                }
         }
         window.location.href = path + window.location.search;
     });
@@ -30,10 +38,9 @@ document.querySelectorAll('.menu div').forEach(div => {
 
 // 사용자 프로필 이미지명 받아와서 출력
 document.addEventListener('DOMContentLoaded', async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-
-    const response = await fetch(`http://localhost:4000/json/members?id=${id}`);
+    const response = await fetch(`http://localhost:4000/json/members`, {
+        credentials: 'include',
+    });
     const json = await response.json();
     
     document.querySelector('.header-image img').src = `/images/members/${json.image}`;

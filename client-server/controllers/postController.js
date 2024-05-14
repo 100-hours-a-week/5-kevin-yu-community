@@ -16,30 +16,11 @@ const methods = {
     showEditForm(req, res) {
         res.sendFile(path.join(HTML_PATH, 'edit-post.html'));
     },
-    async addPost(req, res) {
-        const response = await fetch(`http://localhost:4000/json/posts?id=${req.query.id}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                ...req.body,
-                image: req.file === undefined ? "" : req.file.filename
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (response.status === 500) {
-            imageUtils.deleteImage('posts', req.file.filename);
-        }
-        response.json().then(data => {
-            res.status(response.status).json(data);
-        });
+    async savePostImage(req, res) {
+        res.status(200).json({imageName: req.file.filename});
     },
     async editPost(req, res) {
         const postNo = Number(req.params.no);
-        const userInput = req.body;
-        if (userInput.title.trim() === '' || userInput.content.trim() === '') {
-            res.status(400).json({message: '사용자 입력이 올바르지 않습니다.'});
-        }
         const response = await fetch(`http://localhost:4000/json/posts/${postNo}`, {
             method: 'PUT',
             headers: {

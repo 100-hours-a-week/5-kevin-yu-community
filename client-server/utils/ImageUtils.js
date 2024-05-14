@@ -8,24 +8,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve(dirname(__filename), '..');
 
 // 어디에 저장할 것인지 구분 -> posts 디렉토리에 저장할 파일들
-const postsStorage = multer.diskStorage({
+const createStorage = (folder) => multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'public/images/posts'));
+        cb(null, path.join(__dirname, `public/images/${folder}`));
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '_' + file.originalname);
     }
 });
 
-// 어디에 저장할 것인지 구분 -> members 디렉토리에 저장할 파일들
-const membersStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'public/images/members'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '_' + file.originalname);
-    }
-});
+// 어디에 저장할 것인지 구분
+const postsStorage = createStorage('posts');
+const membersStorage = createStorage('members');
 
 // 이미지 파일만 받을 수 있도록 filter 구성
 const fileFilter = (req, file, cb) => {

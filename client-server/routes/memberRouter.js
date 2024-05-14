@@ -9,6 +9,7 @@ const {uploadMembers} = imageUtils;
 // 로그인 페이지 서빙
 router.get('/login', memberController.showLoginForm);
 
+// Deprecated: 필요 없는 코드가 되었음
 // 사용자가 로그인 시도
 router.post('/login', memberController.loginCheck);
 
@@ -22,7 +23,7 @@ router.post('/join', uploadMembers.single('file'), memberController.join);
 router.get('/info', memberController.showEditInfoForm);
 
 // 사용자 정보 수정
-router.put('/', uploadMembers.single('file'), memberController.editMemberInfo);
+router.patch('/', uploadMembers.single('file'), memberController.editMemberImage);
 
 // 사용자 정보 삭제
 router.delete('/', memberController.deleteMember);

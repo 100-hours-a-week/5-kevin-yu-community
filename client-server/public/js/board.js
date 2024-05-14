@@ -3,7 +3,7 @@ const id = urlParams.get('id');
 
 // 게시글 작성 페이지로 이동
 document.querySelector('.post-button').addEventListener('click', () => {
-    window.location.href = `/posts/add-form?id=${id}`;
+    window.location.href = `/posts/add-form`;
 });
 
 // 조회수와 댓글의 개수를 변환하는 함수
@@ -62,15 +62,21 @@ async function getImageMap() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const boardResponse = await fetch('http://localhost:4000/json/board')
-    const board = await boardResponse.json();
+    const response = await fetch('http://localhost:4000/json/board', {
+        credentials: "include"
+    });
+    const json = await response.json();
+
+    if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
+        window.location.href = '/members/login';
+    }
 
     const imageMap = await getImageMap();
 
     const postList = document.querySelector('.post-list');
-    board.forEach(post => {
+    json.forEach(post => {
         // JSON에서 가져온 데이터로 새로운 요소를 생성하고
-        let newPostElement = makePostElement(board, post, imageMap);
+        let newPostElement = makePostElement(json, post, imageMap);
         // 기존의 요소 밑에 추가함
         postList.appendChild(newPostElement);
     });
@@ -80,5 +86,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.querySelector('.post-list').addEventListener('click', (e) => {
     // closest() -> 가장 가까운 부모 요소 중 입력된 선택자에 해당하는 요소
     const boardNo = e.target.closest('.post').childNodes[1].value;
-    window.location.href = `/posts/${boardNo}?id=${id}`;
+    window.location.href = `/posts/${boardNo}`;
 });
