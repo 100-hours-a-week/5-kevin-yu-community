@@ -28,7 +28,7 @@ router.put('/', uploadTemporary.single('file'), memberController.editMember);
 router.delete('/', memberController.deleteMember);
 
 // 비밀번호 변경
-router.patch('/password', memberController.editPassword);
+router.patch('/password', checkLogin.isLoggedIn, memberController.editPassword);
 
 // 회원들의 프로필 이미지 조회
 router.get('/images', memberController.getProfileImages);
