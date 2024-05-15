@@ -41,6 +41,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const response = await fetch(`http://localhost:4000/json/members`, {
         credentials: 'include',
     });
+
+    if (response.status === 401) {
+        window.location.href = '/members/login';
+    }
+
     const json = await response.json();
     
     document.querySelector('.header-image img').src = `/images/members/${json.image}`;

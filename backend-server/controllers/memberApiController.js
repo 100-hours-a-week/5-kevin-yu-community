@@ -147,7 +147,7 @@ const methods = {
         }
     },
     async editPassword(req, res) {
-        const memberId = Number(req.query.id);
+        const memberId = req.session.member.id;
         const userInput = req.body;
         try {
             const result = await memberModel.editPassword(memberId, userInput);
