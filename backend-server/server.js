@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const session = require("express-session");
+const session = require('express-session');
 
 const memberRouter = require('./routes/memberApiRouter.js');
 const boardRouter = require('./routes/boardApiRouter.js');

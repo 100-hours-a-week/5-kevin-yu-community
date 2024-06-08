@@ -1,4 +1,4 @@
-const postModel = require("../models/postModel.js");
+const postModel = require("../models/jsonPostModel.js");
 
 const methods = {
     async showBoard(req, res) {

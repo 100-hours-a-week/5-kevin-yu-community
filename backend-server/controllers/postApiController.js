@@ -1,6 +1,6 @@
-const postModel = require("../models/postModel.js");
-const memberModel = require("../models/memberModel.js");
-const commentModel = require("../models/commentModel.js");
+const postModel = require("../models/jsonPostModel.js");
+const memberModel = require("../models/jsonMemberModel.js");
+const commentModel = require("../models/jsonCommentModel.js");
 
 const FormData = require('form-data');
 const axios= require('axios');
