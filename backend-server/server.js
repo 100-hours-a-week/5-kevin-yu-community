@@ -5,7 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-const memberRouter = require('./routes/memberApiRouter.js');
+const memberRouter = require('./routes/userApiRouter.js');
 const boardRouter = require('./routes/boardApiRouter.js');
 const postRouter = require('./routes/postApiRouter.js');
 
@@ -33,7 +33,7 @@ server.use(session({
 );
 
 // member.json을 사용하는 작업들
-server.use('/json/members', memberRouter);
+server.use('/json/users', memberRouter);
 
 // board.json을 사용하는 작업들
 server.use('/json/board', boardRouter);

@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 // member.json을 쓰는 페이지는 전부 memberRouter로
-app.use('/members', memberRouter);
+app.use('/users', memberRouter);
 
 // 게시판은 바로 파일만 전달
 app.get('/board', (req, res) => {

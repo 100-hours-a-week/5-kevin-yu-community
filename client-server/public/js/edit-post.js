@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
         .then(response => {
             if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
-                window.location.href = '/members/login';
+                window.location.href = '/users/login';
             }
 
             return response.json()

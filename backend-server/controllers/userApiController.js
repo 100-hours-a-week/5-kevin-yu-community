@@ -1,4 +1,4 @@
-const memberModel = require("../models/jsonMemberModel.js");
+const memberModel = require("../models/jsonUserModel.js");
 const postModel = require("../models/jsonPostModel.js");
 const commentModel = require("../models/jsonCommentModel.js");
 
@@ -13,7 +13,7 @@ async function sendFileToClientServer(file, prevImageName) {
     formData.append('prevImageName', prevImageName);
     formData.append('file', file.buffer, {filename: file.originalname, contentType: file.mimeType});
 
-    const response = await axios.patch('http://localhost:3000/members', formData, {
+    const response = await axios.patch('http://localhost:3000/users', formData, {
         headers: formData.getHeaders(),
     });
 
@@ -137,7 +137,7 @@ const methods = {
         try {
             prevImage = await memberModel.deleteMember(memberId);
 
-            await axios.delete(`http://localhost:3000/members?image=${prevImage}`);
+            await axios.delete(`http://localhost:3000/users?image=${prevImage}`);
 
             res.status(200).json({
                 message: '회원 탈퇴를 완료했습니다. 이용해주셔서 감사합니다.'

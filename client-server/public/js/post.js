@@ -23,7 +23,7 @@ function convertCount(count) {
 
 // 회원들의 닉네임과 프로필 이미지를 Map 형태로 반환
 async function getImageMap() {
-    const memberResponse = await fetch('http://localhost:4000/json/members/images');
+    const memberResponse = await fetch('http://localhost:4000/json/users/images');
     const members = await memberResponse.json();
 
     return members.profileImages.reduce((memberMap, member) => {
@@ -40,7 +40,7 @@ function insertText(post) {
     // 프로필 사진
     const profile = document.querySelector('.writer .image');
     getImageMap().then(map => {
-        profile.src = `../images/members/${map.get(post.writer)}`;
+        profile.src = `../images/users/${map.get(post.writer)}`;
     });
     // 작성자
     const nickname = document.querySelector('.nickname');
@@ -85,7 +85,7 @@ async function makeCommentList(postNo, nickname) {
 
         commentElement.innerHTML = `
             <div>
-                <img class="image" src="../images/members/${imageMap.get(comment.writer)}" alt="" />
+                <img class="image" src="../images/users/${imageMap.get(comment.writer)}" alt="" />
             </div>
             <div class="center">
                 <div class="comment-no" style="display:none">${comment.no}</div>
@@ -113,7 +113,7 @@ async function makeCommentList(postNo, nickname) {
 
 // JSON에 있는 데이터로 동적으로 요소를 생성하고 추가
 document.addEventListener('DOMContentLoaded', async () => {
-    const response = await fetch(`http://localhost:4000/json/members`, {
+    const response = await fetch(`http://localhost:4000/json/users`, {
         credentials: 'include',
     });
     const json = await response.json();
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
         .then(response => {
             if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
-                window.location.href = '/members/login';
+                window.location.href = '/users/login';
             }
 
             return response.json()

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const memberController = require("../controllers/memberApiController.js");
+const memberController = require("../controllers/userApiController.js");
 const checkLogin = require('../middlewares/checkLogin');
 const uploadTemporary = require('../utils/ImageUtils.js');
 

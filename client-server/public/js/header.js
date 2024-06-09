@@ -16,18 +16,18 @@ document.querySelectorAll('.menu div').forEach(div => {
         let path;
         switch (div.textContent) {
             case '회원정보수정':
-                path = '/members/info';
+                path = '/users/info';
                 break;
             case '비밀번호수정':
-                path = '/members/password';
+                path = '/users/password';
                 break;
             case '로그아웃':
-                const response = await fetch('http://localhost:4000/json/members/logout', {
+                const response = await fetch('http://localhost:4000/json/users/logout', {
                     credentials: 'include',
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    path = '/members/login';
+                    path = '/users/login';
                 } else {
                     alert(data.message);
                 }
@@ -38,15 +38,15 @@ document.querySelectorAll('.menu div').forEach(div => {
 
 // 사용자 프로필 이미지명 받아와서 출력
 document.addEventListener('DOMContentLoaded', async () => {
-    const response = await fetch(`http://localhost:4000/json/members`, {
+    const response = await fetch(`http://localhost:4000/json/users`, {
         credentials: 'include',
     });
 
     if (response.status === 401) {
-        window.location.href = '/members/login';
+        window.location.href = '/users/login';
     }
 
     const json = await response.json();
     
-    document.querySelector('.header-image img').src = `/images/members/${json.image}`;
+    document.querySelector('.header-image img').src = `/images/users/${json.image}`;
 });

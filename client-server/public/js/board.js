@@ -43,7 +43,7 @@ function makePostElement(data, post, imageMap) {
         </section>
         <hr class="post-horizontal" />
         <section class="writer">
-            <img class="image" src="../images/members/${imageMap.get(post.writer)}" alt="">
+            <img class="image" src="../images/users/${imageMap.get(post.writer)}" alt="">
             <div class="nickname">${post.writer}</div>
         </section>`;
     // 생성된 요소를 반환
@@ -52,7 +52,7 @@ function makePostElement(data, post, imageMap) {
 
 // 회원들의 닉네임과 프로필 이미지를 Map 형태로 반환
 async function getImageMap() {
-    const memberResponse = await fetch('http://localhost:4000/json/members/images');
+    const memberResponse = await fetch('http://localhost:4000/json/users/images');
     const members = await memberResponse.json();
 
     return members.profileImages.reduce((memberMap, member) => {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const json = await response.json();
 
     if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
-        window.location.href = '/members/login';
+        window.location.href = '/users/login';
     }
 
     const imageMap = await getImageMap();

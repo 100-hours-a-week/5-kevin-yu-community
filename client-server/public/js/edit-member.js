@@ -5,18 +5,18 @@ const helper = document.querySelector('.helper');
 const editButton = document.querySelector('.button');
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch(`http://localhost:4000/json/members`, {
+    fetch(`http://localhost:4000/json/users`, {
         credentials: "include",
     })
         .then(response => {
             if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
-                window.location.href = '/members/login';
+                window.location.href = '/users/login';
             }
 
             return response.json()
         })
         .then(member => {
-            image.src = `/images/members/${member.image}`;
+            image.src = `/images/users/${member.image}`;
             emailInput.textContent = member.email;
             nicknameInput.value = member.nickname;
         });
@@ -46,7 +46,7 @@ function changeFinishButton(state) {
 }
 
 async function checkDuplication(nickname) {
-    const response = await fetch(`http://localhost:4000/json/members/duplication?nickname=${nickname}`, {
+    const response = await fetch(`http://localhost:4000/json/users/duplication?nickname=${nickname}`, {
         credentials: 'include',
     });
 
@@ -83,7 +83,7 @@ editButton.addEventListener('click', async () => {
         }
         helper.style.visibility = 'hidden';
 
-        const response = await fetch(`http://localhost:4000/json/members`, {
+        const response = await fetch(`http://localhost:4000/json/users`, {
             method: 'PUT',
             body: formData,
             credentials: 'include',
@@ -116,7 +116,7 @@ document.querySelector('.quit').addEventListener('click', (e) => {
 });
 
 document.querySelector('.modal .confirm').addEventListener('click', async () => {
-    const response = await fetch(`http://localhost:4000/json/members`, {
+    const response = await fetch(`http://localhost:4000/json/users`, {
         method: 'DELETE',
         credentials: 'include',
     });
@@ -124,7 +124,7 @@ document.querySelector('.modal .confirm').addEventListener('click', async () => 
     const json = await response.json();
     if (response.ok) {
         alert(json.message);
-        window.location.href = '/members/login';
+        window.location.href = '/users/login';
     } else {
         alert(json.message);
     }

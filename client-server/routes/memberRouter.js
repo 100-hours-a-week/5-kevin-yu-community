@@ -1,6 +1,6 @@
 import express from 'express';
 
-import memberController from '../controllers/memberController.js';
+import memberController from '../controllers/userController.js';
 import imageUtils from "../utils/ImageUtils.js";
 
 const router = express.Router();

@@ -1,5 +1,5 @@
 const postModel = require("../models/jsonPostModel.js");
-const memberModel = require("../models/jsonMemberModel.js");
+const memberModel = require("../models/jsonUserModel.js");
 const commentModel = require("../models/jsonCommentModel.js");
 
 const FormData = require('form-data');

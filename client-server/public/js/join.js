@@ -1,7 +1,7 @@
 // 헤더
 // 뒤로 가기 버튼
 document.querySelector('.back').addEventListener('click', () => {
-    window.location.href = '/members/login';
+    window.location.href = '/users/login';
 });
 
 // 본문
@@ -191,7 +191,7 @@ joinButton.addEventListener('click', () => {
         formData.append("password", passwordInput.value);
         formData.append("nickname", nicknameInput.value);
 
-        fetch('/members/join', {
+        fetch('/users/join', {
             method: 'POST',
             body: formData
         }).then(response => {
@@ -206,7 +206,7 @@ joinButton.addEventListener('click', () => {
 
             if (status === 201) {
                 alert('회원가입이 완료되었습니다.');
-                window.location.href = '/members/login';
+                window.location.href = '/users/login';
             } else if (status === 409) {
                 if (json.message === 'Email already exists') {
                     showHelperText(emailHelper, '*이미 등록된 이메일입니다.');

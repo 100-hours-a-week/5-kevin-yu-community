@@ -14,7 +14,7 @@ const methods = {
     // Deprecated: 필요 없는 코드가 되었음
     async loginCheck(req, res) {
         try {
-            const response = await fetch('http://localhost:4000/json/members/login', {
+            const response = await fetch('http://localhost:4000/json/users/login', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ const methods = {
             image: req.file.filename
         }
 
-        const response = await fetch('http://localhost:4000/json/members/join', {
+        const response = await fetch('http://localhost:4000/json/users/join', {
             method: 'POST',
             body: JSON.stringify(newUser),
             headers: {

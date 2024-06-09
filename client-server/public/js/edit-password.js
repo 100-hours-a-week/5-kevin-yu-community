@@ -79,7 +79,7 @@ const toast = document.querySelector('.toast-message');
 // 모든 유효성 검사를 통과했다면, 수정하기 버튼을 눌렀을 때
 editButton.addEventListener('click', async () => {
     if (isCollectPassword && isSameWithPasswordCheck && isSameWithPassword) {
-        const response = await fetch(`http://localhost:4000/json/members/password`, {
+        const response = await fetch(`http://localhost:4000/json/users/password`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
