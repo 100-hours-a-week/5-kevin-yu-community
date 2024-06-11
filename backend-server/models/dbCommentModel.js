@@ -34,9 +34,18 @@ const deleteComment = (commentId) => {
     return dbConnector.executeQueryWithParams(query, [commentId]);
 };
 
+const deleteAllComments = (postId) => {
+    const query = `UPDATE comments
+                          SET status ='deleted'
+                          WHERE post_id = ?`;
+
+    return dbConnector.executeQueryWithParams(query, [postId]);
+};
+
 module.exports = {
     getCommentsById,
     addComment,
     editComment,
     deleteComment,
+    deleteAllComments,
 };

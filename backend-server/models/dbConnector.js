@@ -24,7 +24,43 @@ const executeQueryWithParams = (query, params) => {
     });
 };
 
+const beginTransaction = () => {
+    return new Promise((resolve, reject) => {
+        db.beginTransaction((err) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve();
+        });
+    });
+};
+
+const commitTransaction = () => {
+    return new Promise((resolve, reject) => {
+        db.commit((err) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve();
+        });
+    });
+};
+
+const rollbackTransaction = () => {
+    return new Promise((resolve, reject) => {
+        db.rollback((err) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve();
+        });
+    });
+};
+
 module.exports = {
     executeQuery,
-    executeQueryWithParams
+    executeQueryWithParams,
+    beginTransaction,
+    commitTransaction,
+    rollbackTransaction,
 };
