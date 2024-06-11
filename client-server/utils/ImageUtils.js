@@ -19,7 +19,7 @@ const createStorage = (folder) => multer.diskStorage({
 
 // 어디에 저장할 것인지 구분
 const postsStorage = createStorage('posts');
-const membersStorage = createStorage('members');
+const membersStorage = createStorage('users');
 
 // 이미지 파일만 받을 수 있도록 filter 구성
 const fileFilter = (req, file, cb) => {

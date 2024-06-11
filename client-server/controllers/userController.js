@@ -50,8 +50,9 @@ const methods = {
                 'Content-Type': 'application/json'
             }
         });
-        if (response.status === 409) {
-            imageUtils.deleteImage('members', req.file.filename);
+
+        if (response.status !== 201) {
+            imageUtils.deleteImage('users', req.file.filename);
         }
 
         response.json().then(data => {
@@ -63,7 +64,7 @@ const methods = {
     },
     async editMemberImage(req, res) {
         try {
-            imageUtils.deleteImage('members', req.body.prevImageName);
+            imageUtils.deleteImage('users', req.body.prevImageName);
             res.status(200).json({imageName: req.file.filename});
         } catch (error) {
             res.status(500).json({message: '이미지 삭제에 실패했습니다.'});
@@ -71,7 +72,7 @@ const methods = {
     },
     async deleteMember(req, res) {
         try {
-            imageUtils.deleteImage('members', req.query.image);
+            imageUtils.deleteImage('users', req.query.image);
             res.status(200).json({})
         } catch (error) {
             res.status(500).json({message: '이미지 삭제에 실패했습니다.'});

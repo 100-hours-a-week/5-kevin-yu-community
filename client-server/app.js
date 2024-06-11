@@ -3,7 +3,7 @@ import express from 'express';
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
-import memberRouter from './routes/memberRouter.js';
+import memberRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
 
 config();

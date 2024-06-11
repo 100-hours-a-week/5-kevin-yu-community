@@ -1,5 +1,5 @@
 const isLoggedIn = (req, res, next) => {
-    if (!req.session.member) {
+    if (!req.session.user) {
         res.status(401).json({messsage: '회원 정보를 찾을 수 없습니다.'});
         return;
     }
@@ -8,4 +8,4 @@ const isLoggedIn = (req, res, next) => {
 
 module.exports = {
     isLoggedIn
-}
+};

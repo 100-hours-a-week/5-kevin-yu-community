@@ -21,16 +21,17 @@ function convertCount(count) {
     }
 }
 
+// @Deprecated
 // 회원들의 닉네임과 프로필 이미지를 Map 형태로 반환
-async function getImageMap() {
-    const memberResponse = await fetch('http://localhost:4000/json/users/images');
-    const members = await memberResponse.json();
-
-    return members.profileImages.reduce((memberMap, member) => {
-        memberMap.set(member.nickname, member.image);
-        return memberMap;
-    }, new Map());
-}
+// async function getImageMap() {
+//     const memberResponse = await fetch('http://localhost:4000/json/users/images');
+//     const members = await memberResponse.json();
+//
+//     return members.profileImages.reduce((memberMap, member) => {
+//         memberMap.set(member.nickname, member.image);
+//         return memberMap;
+//     }, new Map());
+// }
 
 // 게시글 템플릿에 JSON 데이터 삽입
 function insertText(post) {
@@ -39,15 +40,16 @@ function insertText(post) {
     title.textContent = post.title;
     // 프로필 사진
     const profile = document.querySelector('.writer .image');
-    getImageMap().then(map => {
-        profile.src = `../images/users/${map.get(post.writer)}`;
-    });
+    // getImageMap().then(map => {
+    //     profile.src = `../images/users/${map.get(post.writer)}`;
+    // });
+    profile.src = `../images/users/${post.profile_image}`;
     // 작성자
     const nickname = document.querySelector('.nickname');
-    nickname.textContent = post.writer;
+    nickname.textContent = post.nickname;
     // 작성일
     const regDt = document.querySelector('.date');
-    regDt.textContent = post.regDt;
+    regDt.textContent = post.created_at;
     // 이미지
     const image = document.querySelector('.content .image img');
     if (post.image === '') {
@@ -55,28 +57,27 @@ function insertText(post) {
         document.querySelector('.content .image').style.display = 'none';
     } else {
         document.querySelector('.content .image').style.display = 'block';
-        image.src = `/images/posts/${post.image}`;
+        image.src = `/images/posts/${post.post_image}`;
     }
     // 본문
     const content = document.querySelector('.text');
     content.textContent = post.content;
     // 조회수
-    const hit = document.querySelector('.count div:first-child p:first-child');
-    hit.textContent = convertCount(post.hit);
+    const views = document.querySelector('.count div:first-child p:first-child');
+    views.textContent = convertCount(post.views);
     // 댓글수
     const comment = document.querySelector('.count div:nth-child(2) p:first-child');
-    comment.textContent = convertCount(post.comment);
+    comment.textContent = convertCount(post.comment_count);
 }
 
 // 댓글 리스트 생성
 const commentList = document.querySelector('.comment-list');
 
-async function makeCommentList(postNo, nickname) {
+async function makeCommentList(nickname) {
     const response = await fetch(`http://localhost:4000/json/posts/${postNo}/comments`);
-    const json = await response.json();
-    const comments = json.commentList.comments;
+    const comments = await response.json();
 
-    const imageMap = await getImageMap();
+    // const imageMap = await getImageMap();
 
     comments.forEach(comment => {
         // 댓글 요소 생성
@@ -85,13 +86,13 @@ async function makeCommentList(postNo, nickname) {
 
         commentElement.innerHTML = `
             <div>
-                <img class="image" src="../images/users/${imageMap.get(comment.writer)}" alt="" />
+                <img class="image" src="../images/users/${comment.profile_image}" alt="" />
             </div>
             <div class="center">
-                <div class="comment-no" style="display:none">${comment.no}</div>
+                <div class="comment-no" style="display:none">${comment.comment_id}</div>
                 <div>
-                    <div class="nickname bold">${comment.writer}</div>
-                    <div class="date regular">${comment.regDt}</div>
+                    <div class="nickname bold">${comment.nickname}</div>
+                    <div class="date regular">${comment.created_at}</div>
                 </div>
                 <p>${comment.content}</p>
             </div>
@@ -101,7 +102,7 @@ async function makeCommentList(postNo, nickname) {
             </div>
         `;
         // 본인이 아니면 댓글 수정/삭제 못하게 막기
-        if (comment.writer !== nickname) {
+        if (comment.nickname !== nickname) {
             commentElement.querySelector('.buttons').style.display = 'none';
         }
         // 댓글 요소 생성 후 댓글 리스트 요소에 추가
@@ -126,20 +127,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (response.status === 401) { // 회원정보가 없으면 로그인 화면으로
                 window.location.href = '/users/login';
             }
-
             return response.json()
         })
         .then(post => {
             const commentSection = document.querySelector('.comment');
-            console.log(post);
             insertText(post);
 
             // 만약 작성자가 아니면 수정/삭제 버튼 숨김
-            if (post.writer !== nickname) {
+            if (post.nickname !== nickname) {
                 document.querySelector('.info .buttons').style.visibility = 'hidden';
             }
 
-            const commentList = makeCommentList(post.no, nickname);
+            const commentList = makeCommentList(nickname);
             commentSection.appendChild(commentList);
         }) // then
         .catch(error => console.log(`Error: ${error}`));

@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return response.json()
         })
-        .then(member => {
-            image.src = `/images/users/${member.image}`;
-            emailInput.textContent = member.email;
-            nicknameInput.value = member.nickname;
+        .then(user => {
+            image.src = `/images/users/${user.profile_image}`;
+            emailInput.textContent = user.email;
+            nicknameInput.value = user.nickname;
         });
 });
 
@@ -66,6 +66,8 @@ let isChanged = false;
 editButton.addEventListener('click', async () => {
     const nickname = nicknameInput.value;
 
+    console.log(nickname);
+
     if (nickname.trim() === '') {
         showHelperText('*닉네임을 입력해주세요.');
         changeFinishButton(false);
@@ -88,6 +90,10 @@ editButton.addEventListener('click', async () => {
             body: formData,
             credentials: 'include',
         });
+
+        if (response.status === 400) {
+            showHelperText('*변경사항이 없습니다.');
+        }
 
         if (response.ok) {
             isChanged = true;

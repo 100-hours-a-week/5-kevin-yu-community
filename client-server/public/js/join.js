@@ -195,7 +195,6 @@ joinButton.addEventListener('click', () => {
             method: 'POST',
             body: formData
         }).then(response => {
-            console.log(response);
             const status = response.status;
             return response.json().then(json => {
                 return {status, json};
@@ -208,7 +207,7 @@ joinButton.addEventListener('click', () => {
                 alert('회원가입이 완료되었습니다.');
                 window.location.href = '/users/login';
             } else if (status === 409) {
-                if (json.message === 'Email already exists') {
+                if (json.message === '이미 존재하는 이메일입니다.') {
                     showHelperText(emailHelper, '*이미 등록된 이메일입니다.');
                 } else {
                     showHelperText(nicknameHelper, '*이미 존재하는 닉네임입니다.');
