@@ -31,6 +31,7 @@ router.delete('/', memberController.deleteMember);
 router.patch('/password', checkLogin.isLoggedIn, memberController.editPassword);
 
 // 회원들의 프로필 이미지 조회
-router.get('/images', memberController.getProfileImages);
+// @Deprecated
+// router.get('/images', memberController.getProfileImages);
 
 module.exports = router;

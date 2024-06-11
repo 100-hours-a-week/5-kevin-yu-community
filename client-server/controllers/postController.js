@@ -33,7 +33,9 @@ const methods = {
         });
         const json = await response.json();
         if (response.ok) {
-            imageUtils.deleteImage('posts', json.prevImage);
+            if (json.prevImage !== '') {
+                imageUtils.deleteImage('posts', json.prevImage);
+            }
             res.status(200).json(json);
         } else {
             res.status(response.status).json({message: json.message});

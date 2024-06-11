@@ -47,6 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const json = await response.json();
-    
-    document.querySelector('.header-image img').src = `/images/users/${json.image}`;
+
+    document.querySelector('.header-image img').src = `/images/users/${json.profile_image}`;
 });
